@@ -8,21 +8,30 @@
 
 ```bash
 npm install --save react-observing
+or
+yarn add react-observing
 ```
 
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import React from 'react';
 
-import MyComponent from 'react-observing'
-import 'react-observing/dist/index.css'
+import { observable, useObserver } from 'react-observing';
 
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+const NameStore = observable("My name")
+
+export const App = () => {
+    const [name, setName] = useObserver(NameStore)
+
+    return (
+        <label>
+            {name}
+            <input value={name} onChange={e => setName(e.target.value)} />
+        </label>
+    )
 }
+
 ```
 
 ## License
