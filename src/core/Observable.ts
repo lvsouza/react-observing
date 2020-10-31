@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid'
-
 /**
  * Result of an inscription on an observable
  */
@@ -18,7 +17,8 @@ export interface ISubscription {
  *
  * @param T Observable value type
  */
-export interface IObserver<T> {
+export interface IObservable<T> {
+  id: string
   /**
    * Static value.
    * When making an assignment on this property, all
@@ -46,8 +46,10 @@ export interface IListeners<T> {
 }
 /**
  * Allows us to subscribe to changes to a value
+ * @param initialValue - `T` Default value
+ * @returns IObservable<T> Observable
  */
-export function observable<T>(value: T): IObserver<T> {
+export function observe<T>(initialValue: T): IObservable<T> {
   /**
    * Stores all listeners that must be notified that the value changes
    */
@@ -58,14 +60,14 @@ export function observable<T>(value: T): IObserver<T> {
    * @param newValue New value to be stored
    */
   const setValue = (newValue: T) => {
-    value = newValue
+    initialValue = newValue
     listeners.forEach((listener) => listener.emit(newValue))
   }
 
   /**
    * Returns the stored value
    */
-  const getValue = () => value
+  const getValue = () => initialValue
 
   /**
    * Creates the subscription for the value
@@ -80,7 +82,6 @@ export function observable<T>(value: T): IObserver<T> {
       unsubscribe: () => {
         const indexToRemove = listeners.indexOf(newListener)
         if (indexToRemove < 0) return
-
         listeners.splice(indexToRemove, 1)
       }
     }
@@ -88,6 +89,7 @@ export function observable<T>(value: T): IObserver<T> {
 
   return {
     subscribe,
+    id: uuidv4(),
     get value() {
       return getValue()
     },
@@ -95,4 +97,26 @@ export function observable<T>(value: T): IObserver<T> {
       setValue(value)
     }
   }
+}
+/**
+ * Allows you to assign values to observables
+ * @param observable - `IObserver<T>` Observable to assign a value
+ * @param value - `T` Value to assign to the observable
+ * @returns void
+ */
+export function set<T>(observable: IObservable<T>, value: T) {
+  observable.value = value
+}
+/**
+ * Valide if a propertie is observable
+ * @param prop any Value to validate
+ * @returns boolean
+ */
+export function isObservableProp(prop: any): boolean {
+  return (
+    prop?.subscribe !== undefined &&
+    prop?.subscribe !== null &&
+    prop?.id !== undefined &&
+    prop?.id !== null
+  )
 }

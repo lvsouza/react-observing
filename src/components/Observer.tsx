@@ -3,7 +3,7 @@ import React, { ReactNode, Fragment } from 'react'
 
 import { useObserver } from '../core/ObserverHooks'
 // eslint-disable-next-line no-unused-vars
-import { IObserver } from '../core/Observable'
+import { IObservable } from '../core/Observable'
 
 /**
  * Props to Observer component
@@ -12,7 +12,7 @@ interface IObserverProps<T> {
   /**
    * Value that will be observed
    */
-  value: IObserver<T>
+  value: IObservable<T>
   /**
    * React childrens
    */
@@ -20,7 +20,7 @@ interface IObserverProps<T> {
 }
 
 /**
- * Allows you to observe an observable value
+ * React component allows you to observe an observable value
  */
 export function Observer<T>({ children, value: obs }: IObserverProps<T>) {
   const [value, setValue] = useObserver(obs)

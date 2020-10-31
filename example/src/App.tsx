@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 
-import { IObserver, observable, useObserver, } from 'react-observing'
+import { IObservable, observe, useObserver, useObserverValue, useSetObserver, set } from 'react-observing'
 import { NameStore } from './store/NameStore'
 
-const LastNameInput = ({ store }: { store: IObserver<string> }) => {
+const LastNameInput = ({ store }: { store: IObservable<string> }) => {
   const [name, setName] = useObserver(store);
 
   return (
@@ -22,7 +22,7 @@ const LastNameInput = ({ store }: { store: IObserver<string> }) => {
   )
 }
 
-const AgeInput = ({ store }: { store: IObserver<string> }) => {
+const AgeInput = ({ store }: { store: IObservable<string> }) => {
   const [name, setName] = useObserver(store);
 
   return (
@@ -41,7 +41,7 @@ const AgeInput = ({ store }: { store: IObserver<string> }) => {
   )
 }
 
-const GenreInput = ({ store }: { store: IObserver<string> }) => {
+const GenreInput = ({ store }: { store: IObservable<string> }) => {
   const [name, setName] = useObserver(store);
 
   return (
@@ -60,7 +60,7 @@ const GenreInput = ({ store }: { store: IObserver<string> }) => {
   )
 }
 
-const FistNameInput = ({ store }: { store: IObserver<string> }) => {
+const FistNameInput = ({ store }: { store: IObservable<string> }) => {
   const [name, setName] = useObserver(store);
 
   return (
@@ -80,21 +80,32 @@ const FistNameInput = ({ store }: { store: IObserver<string> }) => {
 }
 
 export const App = () => {
-  const [names, setnames] = useObserver(NameStore);
+  const setNames = useSetObserver(NameStore);
+  const names = useObserverValue(NameStore);
+
+  const handleInitState = useCallback(() => {
+    names.forEach(({ age, fistName, genre, lastName }) => {
+      set(fistName, "First name");
+      set(lastName, "Last name");
+      set(genre, "Genre");
+      set(age, "Age");
+    });
+  }, [names]);
+  handleInitState();
 
   const handleAdd = useCallback(() => {
-    setnames(oldNames => {
+    setNames(oldNames => {
       return [
         ...oldNames,
         {
-          fistName: observable("My fist name"),
-          lastName: observable("My last name"),
-          genre: observable("My genere"),
-          age: observable("My age"),
+          fistName: observe("My fist name"),
+          lastName: observe("My last name"),
+          genre: observe("My genere"),
+          age: observe("My age"),
         }
       ];
     })
-  }, [setnames]);
+  }, [setNames]);
 
   return (
     <div>

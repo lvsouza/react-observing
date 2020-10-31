@@ -1,2 +1,9 @@
-export { observable, useObserver, IObserver } from './core'
+export {
+  set,
+  observe,
+  IObservable,
+  useObserver,
+  useSetObserver,
+  useObserverValue
+} from './core'
 export { Observer } from './components'

@@ -1,8 +1,8 @@
-import { observable } from "react-observing"
+import { observe } from "react-observing"
 
-export const NameStore = observable([{
-    fistName: observable("My fist name"),
-    lastName: observable("My last name"),
-    genre: observable("My genere"),
-    age: observable("My age"),
+export const NameStore = observe([{
+    fistName: observe(""),
+    lastName: observe(""),
+    genre: observe(""),
+    age: observe(""),
 }]);
