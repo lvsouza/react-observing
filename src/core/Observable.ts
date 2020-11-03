@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 // eslint-disable-next-line no-unused-vars
-import { IListeners, IObservable, ISubscription } from './interfaces'
+import { IListeners, IObservable, ISubscription } from './../interfaces'
 
 /**
  * Allows us to subscribe to changes to a value
@@ -37,7 +37,7 @@ export function observe<T>(initialValue: T): IObservable<T> {
     listeners.push(newListener)
 
     return {
-      subscriptionId: newListener.id,
+      id: newListener.id,
       unsubscribe: () => {
         const indexToRemove = listeners.indexOf(newListener)
         if (indexToRemove < 0) return
@@ -56,38 +56,4 @@ export function observe<T>(initialValue: T): IObservable<T> {
       setValue(value)
     }
   }
-}
-/**
- * Allows you to assign values to observables
- * @param observable - `IObserver<T>` Observable to assign a value
- * @param valOrUpdater Value or function to update the value
- * @returns void
- */
-export function set<T>(
-  observable: IObservable<T>,
-  valOrUpdater: ((currVal: T) => T) | T
-): void {
-  if (typeof valOrUpdater === 'function') {
-    const updater = valOrUpdater as any
-    try {
-      observable.value = updater(observable.value)
-    } catch (e) {
-      throw new Error(e)
-    }
-  } else {
-    observable.value = valOrUpdater
-  }
-}
-/**
- * Valide if a propertie is observable
- * @param prop any Value to validate
- * @returns boolean
- */
-export function isObservableProp(prop: any): boolean {
-  return (
-    prop?.subscribe !== undefined &&
-    prop?.subscribe !== null &&
-    prop?.id !== undefined &&
-    prop?.id !== null
-  )
 }

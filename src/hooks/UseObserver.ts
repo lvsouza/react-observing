@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 
 // eslint-disable-next-line no-unused-vars
-import { IObservable } from './../core'
+import { TSetObservableState } from '../types'
+// eslint-disable-next-line no-unused-vars
+import { IObservable } from './../interfaces'
 
 /**
  * Allows you to subscribe to changes in observable variables
@@ -10,18 +12,16 @@ import { IObservable } from './../core'
  */
 export function useObserver<T>(
   observable: IObservable<T>
-): [T, (valOrUpdater: ((currVal: T) => T) | T) => void] {
+): [T, TSetObservableState<T>] {
   const [value, setValue] = useState<T>(observable.value)
 
-  useEffect(() => {
-    return observable.subscribe(setValue).unsubscribe
-  }, [observable])
+  useEffect(() => observable.subscribe(setValue).unsubscribe, [observable])
 
   /**
    * Change the value
    * @param valOrUpdater Value or function to update the value
    */
-  const handleSetValue: (valOrUpdater: ((currVal: T) => T) | T) => void = (
+  const handleSetValue: TSetObservableState<T> = (
     valOrUpdater: ((currVal: T) => T) | T
   ) => {
     if (typeof valOrUpdater === 'function') {

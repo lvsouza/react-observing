@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-unused-vars
-import { IObservable } from './../core'
+import { TSetObservableState } from '../types'
+// eslint-disable-next-line no-unused-vars
+import { IObservable } from './../interfaces'
 
 /**
  * Allows you to subscribe to changes in observable variables
@@ -8,12 +10,12 @@ import { IObservable } from './../core'
  */
 export function useSetObserver<T>(
   observable: IObservable<T>
-): (valOrUpdater: ((currVal: T) => T) | T) => void {
+): TSetObservableState<T> {
   /**
    * Change the value
    * @param valOrUpdater Value or function to update the value
    */
-  const handleSetValue: (valOrUpdater: ((currVal: T) => T) | T) => void = (
+  const handleSetValue: TSetObservableState<T> = (
     valOrUpdater: ((currVal: T) => T) | T
   ) => {
     if (typeof valOrUpdater === 'function') {

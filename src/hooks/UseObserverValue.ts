@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 // eslint-disable-next-line no-unused-vars
-import { IObservable } from './../core'
+import { IObservable } from './../interfaces'
 
 /**
  * Allows you to subscribe to changes in observable variables
@@ -11,9 +11,7 @@ import { IObservable } from './../core'
 export function useObserverValue<T>(observable: IObservable<T>): T {
   const [value, setValue] = useState<T>(observable.value)
 
-  useEffect(() => {
-    return observable.subscribe(setValue).unsubscribe
-  }, [observable])
+  useEffect(() => observable.subscribe(setValue).unsubscribe, [observable])
 
   return value
 }
