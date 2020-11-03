@@ -16,9 +16,9 @@ yarn add react-observing
 
 ```tsx
 import React from 'react';
-import { observable, useObserver } from 'react-observing';
+import { observe, useObserver } from 'react-observing';
 
-const NameStore = observable("My name")
+const NameStore = observe("My name")
 
 export const App = () => {
     const [name, setName] = useObserver(NameStore)
