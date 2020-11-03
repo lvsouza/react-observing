@@ -1,2 +1,2 @@
-export * from './ObserverHooks'
 export * from './Observable'
+export * from './interfaces'

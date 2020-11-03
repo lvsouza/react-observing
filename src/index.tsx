@@ -1,9 +1,9 @@
 export {
   set,
   observe,
+  IListeners,
   IObservable,
-  useObserver,
-  useSetObserver,
-  useObserverValue
+  ISubscription,
+  isObservableProp
 } from './core'
-export { Observer } from './components'
+export { useObserver, useSetObserver, useObserverValue } from './hooks'

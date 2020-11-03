@@ -1,49 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
-/**
- * Result of an inscription on an observable
- */
-export interface ISubscription {
-  /**
-   * Unique universal registration id
-   */
-  subscriptionId: string
-  /**
-   * Allows cancellation of registration in the observable
-   */
-  unsubscribe(): void
-}
-/**
- * Interface that defines an observable value
- *
- * @param T Observable value type
- */
-export interface IObservable<T> {
-  id: string
-  /**
-   * Static value.
-   * When making an assignment on this property, all
-   * subscribers to that amount will hear
-   */
-  value: T
-  /**
-   * Enables enrollment in value changes
-   * @param callback Function performed when there is a change in the observable value
-   */
-  subscribe(callback: (val: T) => void): ISubscription
-}
-/**
- * Defines the basic information that an event listener must have so that it can be properly notified and handled
- */
-export interface IListeners<T> {
-  /**
-   * Listener identification
-   */
-  id: string
-  /**
-   * Stores the function that should be executed when there is an observable value change
-   */
-  emit: (data: T) => void
-}
+
+// eslint-disable-next-line no-unused-vars
+import { IListeners, IObservable, ISubscription } from './interfaces'
+
 /**
  * Allows us to subscribe to changes to a value
  * @param initialValue - `T` Default value
@@ -101,11 +60,23 @@ export function observe<T>(initialValue: T): IObservable<T> {
 /**
  * Allows you to assign values to observables
  * @param observable - `IObserver<T>` Observable to assign a value
- * @param value - `T` Value to assign to the observable
+ * @param valOrUpdater Value or function to update the value
  * @returns void
  */
-export function set<T>(observable: IObservable<T>, value: T) {
-  observable.value = value
+export function set<T>(
+  observable: IObservable<T>,
+  valOrUpdater: ((currVal: T) => T) | T
+): void {
+  if (typeof valOrUpdater === 'function') {
+    const updater = valOrUpdater as any
+    try {
+      observable.value = updater(observable.value)
+    } catch (e) {
+      throw new Error(e)
+    }
+  } else {
+    observable.value = valOrUpdater
+  }
 }
 /**
  * Valide if a propertie is observable
