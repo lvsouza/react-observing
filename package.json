@@ -1,10 +1,7 @@
 {
   "name": "react-observing",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "Allow you observe objects and class in react js.",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "author": "lvsouza",
   "license": "MIT",
   "repository": "lvsouza/react-observing",
