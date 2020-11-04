@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/lvsouza/react-observing/master/src/assets/logo.png" height="150" width="150" alt="react-observing" />
+  <img src="https://raw.githubusercontent.com/lvsouza/react-observing/master/src/assets/logo.png" width="150" alt="react-observing" />
   <h1 align="center">react-observing</h1>
 </p>
 
