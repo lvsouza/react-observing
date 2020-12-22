@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // eslint-disable-next-line no-unused-vars
 import { TSetObservableState } from '../types'
@@ -13,9 +13,18 @@ import { IObservable } from './../interfaces'
 export function useObserver<T>(
   observable: IObservable<T>
 ): [T, TSetObservableState<T>] {
+  const refId = useRef<string>()
   const [value, setValue] = useState<T>(observable.value)
 
-  useEffect(() => observable.subscribe(setValue).unsubscribe, [observable])
+  useEffect(() => {
+    if (refId.current !== observable.id && value !== observable.value) {
+      refId.current = observable.id
+      setValue(observable.value)
+    } else if (refId.current !== observable.id) {
+      refId.current = observable.id
+    }
+    return observable.subscribe(setValue).unsubscribe
+  }, [observable])
 
   /**
    * Change the value
