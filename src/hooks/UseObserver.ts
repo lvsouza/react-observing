@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // eslint-disable-next-line no-unused-vars
 import { TSetObservableState } from '../types'
@@ -13,17 +13,27 @@ import { IObservable } from './../interfaces'
 export function useObserver<T>(
   observable: IObservable<T>
 ): [T, TSetObservableState<T>] {
+  const getValueState = useCallback((value: T): T | (() => T) => {
+    if (typeof value === 'function') {
+      return () => value
+    } else {
+      return value
+    }
+  }, [])
+
   const refId = useRef<string>()
-  const [value, setValue] = useState<T>(observable.value)
+  const [value, setValue] = useState<T>(getValueState(observable.value))
 
   useEffect(() => {
     if (refId.current !== observable.id && value !== observable.value) {
       refId.current = observable.id
-      setValue(observable.value)
+      setValue(getValueState(observable.value))
     } else if (refId.current !== observable.id) {
       refId.current = observable.id
     }
-    return observable.subscribe(setValue).unsubscribe
+
+    return observable.subscribe((value) => setValue(getValueState(value)))
+      .unsubscribe
   }, [observable])
 
   /**
@@ -36,7 +46,7 @@ export function useObserver<T>(
     if (typeof valOrUpdater === 'function') {
       const updater = valOrUpdater as any
       try {
-        observable.value = updater(observable.value)
+        observable.value = updater(getValueState(observable.value))
       } catch (e) {
         throw new Error(e)
       }

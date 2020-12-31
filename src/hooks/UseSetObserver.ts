@@ -1,4 +1,6 @@
 // eslint-disable-next-line no-unused-vars
+import { useCallback } from 'react'
+// eslint-disable-next-line no-unused-vars
 import { TSetObservableState } from '../types'
 // eslint-disable-next-line no-unused-vars
 import { IObservable } from './../interfaces'
@@ -18,10 +20,18 @@ export function useSetObserver<T>(
   const handleSetValue: TSetObservableState<T> = (
     valOrUpdater: ((currVal: T) => T) | T
   ) => {
+    const getValueState = useCallback((value: T): T | (() => T) => {
+      if (typeof value === 'function') {
+        return () => value
+      } else {
+        return value
+      }
+    }, [])
+
     if (typeof valOrUpdater === 'function') {
       const updater = valOrUpdater as any
       try {
-        observable.value = updater(observable.value)
+        observable.value = updater(getValueState(observable.value))
       } catch (e) {
         throw new Error(e)
       }

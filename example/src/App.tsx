@@ -79,6 +79,16 @@ const FistNameInput = ({ store }: { store: IObservable<string> }) => {
   )
 }
 
+const ShowButton = ({ store }: { store: IObservable<() => void> }) => {
+  const show = useObserverValue(store);
+
+  return (
+    <button onClick={show}>
+      Show
+    </button>
+  )
+}
+
 export const App = () => {
   const setNames = useSetObserver(NameStore);
   const names = useObserverValue(NameStore);
@@ -98,10 +108,11 @@ export const App = () => {
       return [
         ...oldNames,
         {
-          fistName: observe("My fist name"),
-          lastName: observe("My last name"),
-          genre: observe("My genere"),
-          age: observe("My age"),
+          show: observe(() => console.log('Try')),
+          fistName: observe(""),
+          lastName: observe(""),
+          genre: observe(""),
+          age: observe(""),
         }
       ];
     })
@@ -122,6 +133,8 @@ export const App = () => {
             <AgeInput store={store.age} />
             <hr />
             <GenreInput store={store.genre} />
+            <hr />
+            <ShowButton store={store.show} />
           </ul>
           <hr />
         </>))}
