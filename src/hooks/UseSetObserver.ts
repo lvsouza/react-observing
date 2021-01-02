@@ -13,6 +13,14 @@ import { IObservable } from './../interfaces'
 export function useSetObserver<T>(
   observable: IObservable<T>
 ): TSetObservableState<T> {
+  const getValueState = useCallback((value: T): T | (() => T) => {
+    if (typeof value === 'function') {
+      return () => value
+    } else {
+      return value
+    }
+  }, [])
+
   /**
    * Change the value
    * @param valOrUpdater Value or function to update the value
@@ -20,14 +28,6 @@ export function useSetObserver<T>(
   const handleSetValue: TSetObservableState<T> = (
     valOrUpdater: ((currVal: T) => T) | T
   ) => {
-    const getValueState = useCallback((value: T): T | (() => T) => {
-      if (typeof value === 'function') {
-        return () => value
-      } else {
-        return value
-      }
-    }, [])
-
     if (typeof valOrUpdater === 'function') {
       const updater = valOrUpdater as any
       try {

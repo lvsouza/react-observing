@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { Fragment, useCallback } from 'react'
 
 import { IObservable, observe, useObserver, useObserverValue, useSetObserver, set } from 'react-observing'
-import { NameStore } from './store/NameStore'
+import { NameStore, TransformedNameStore } from './store/NameStore'
 
 const LastNameInput = ({ store }: { store: IObservable<string> }) => {
   const [name, setName] = useObserver(store);
@@ -90,6 +90,7 @@ const ShowButton = ({ store }: { store: IObservable<() => void> }) => {
 }
 
 export const App = () => {
+  const transformedNames = useObserverValue(TransformedNameStore);
   const setNames = useSetObserver(NameStore);
   const names = useObserverValue(NameStore);
 
@@ -123,8 +124,8 @@ export const App = () => {
       <hr />
       <button onClick={handleAdd}>Add</button>
       <hr />
-      {names.map(store => (
-        <>
+      {names.map((store, index) => (
+        <Fragment key={index}>
           <FistNameInput store={store.fistName} />
           <ul>
             <hr />
@@ -137,7 +138,22 @@ export const App = () => {
             <ShowButton store={store.show} />
           </ul>
           <hr />
-        </>))}
+        </Fragment>))}
+      {transformedNames.map((store, index) => (
+        <Fragment key={index}>
+          <FistNameInput store={store.fistName} />
+          <ul>
+            <hr />
+            <LastNameInput store={store.lastName} />
+            <hr />
+            <AgeInput store={store.age} />
+            <hr />
+            <GenreInput store={store.genre} />
+            <hr />
+            <ShowButton store={store.show} />
+          </ul>
+          <hr />
+        </Fragment>))}
     </div>
   )
 }
