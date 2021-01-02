@@ -18,8 +18,8 @@ import {
  */
 export function transform<T, K>(
   observable: IObservable<T>,
-  readTrasformFunction: (currValue: T) => K,
-  setTrasformFunction?: (currValue: K) => T
+  readTransformFunction: (currValue: T) => K,
+  setTransformFunction?: (currValue: K) => T
 ): ITransformedObservable<K> {
   /**
    * Stores all listeners that must be notified that the value changes
@@ -29,14 +29,14 @@ export function transform<T, K>(
   /**
    * Returns the stored value
    */
-  const getValue = () => readTrasformFunction(observable.value)
+  const getValue = () => readTransformFunction(observable.value)
 
   const setValue = (newValue: K) => {
-    if (setTrasformFunction) {
-      observable.value = setTrasformFunction(newValue)
+    if (setTransformFunction) {
+      observable.value = setTransformFunction(newValue)
     } else {
       throw new Error(
-        'To use the "set" method, the "setTrasformFunction" parameter of a "transform" needs to be informed'
+        'To use the "set" method, the "setTransformFunction" parameter of a "transform" needs to be informed'
       )
     }
   }
@@ -61,7 +61,7 @@ export function transform<T, K>(
 
   observable.subscribe((newValue) => {
     listeners.forEach((listener) =>
-      listener.emit(readTrasformFunction(newValue))
+      listener.emit(readTransformFunction(newValue))
     )
   })
 
