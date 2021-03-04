@@ -5,7 +5,7 @@
 
 > Allow you observe objects, objects inside others objects, list, list insede others lists or class properties in react.
 
-[![NPM](https://img.shields.io/npm/v/react-observing.svg)](https://www.npmjs.com/package/react-observing) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-observing.svg)](https://www.npmjs.com/package/react-observing) [![JavaScript Style Guide](https://img.shields.io/npm/dm/react-observing.svg)](https://www.npmjs.com/package/react-observing) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
