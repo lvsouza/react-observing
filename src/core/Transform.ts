@@ -22,6 +22,10 @@ export function transform<T, K>(
   setTransformFunction?: (currValue: K) => T
 ): ITransformedObservable<K> {
   /**
+   *
+   */
+  const transformId = uuidv4();
+  /**
    * Stores all listeners that must be notified that the value changes
    */
   const listeners: IListeners<K>[] = []
@@ -51,6 +55,7 @@ export function transform<T, K>(
 
     return {
       id: newListener.id,
+      observerId: transformId,
       unsubscribe: () => {
         const indexToRemove = listeners.indexOf(newListener)
         if (indexToRemove < 0) return
@@ -67,7 +72,7 @@ export function transform<T, K>(
 
   return {
     subscribe,
-    id: uuidv4(),
+    id: transformId,
     get value() {
       return getValue()
     },

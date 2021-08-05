@@ -27,6 +27,7 @@
     "space-before-function-paren": 0,
     "react/prop-types": 0,
     "react/jsx-handler-names": 0,
+    "eslint-disable-next-line": "prettier/prettier",
     "react/jsx-fragments": 0,
     "react/no-unused-prop-types": 0,
     "import/export": 0

@@ -9,6 +9,8 @@ import { IListeners, IObservable, ISubscription } from './../interfaces'
  * @returns IObservable<T> Observable
  */
 export function observe<T>(initialValue: T): IObservable<T> {
+  const observerId = uuidv4();
+
   /**
    * Stores all listeners that must be notified that the value changes
    */
@@ -37,6 +39,7 @@ export function observe<T>(initialValue: T): IObservable<T> {
     listeners.push(newListener)
 
     return {
+      observerId,
       id: newListener.id,
       unsubscribe: () => {
         const indexToRemove = listeners.indexOf(newListener)
@@ -48,7 +51,7 @@ export function observe<T>(initialValue: T): IObservable<T> {
 
   return {
     subscribe,
-    id: uuidv4(),
+    id: observerId,
     get value() {
       return getValue()
     },

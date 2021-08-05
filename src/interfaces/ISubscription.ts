@@ -7,6 +7,10 @@ export interface ISubscription {
    */
   id: string
   /**
+   * Unique universal observer id
+   */
+  observerId: string
+  /**
    * Allows cancellation of registration in the observable
    */
   unsubscribe(): void
