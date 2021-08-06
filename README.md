@@ -20,8 +20,11 @@ yarn add react-observing
 This library helps in managing complex states. Allowing you to create separate states for each property of an object that can be a state as well. This allows that within react a property's state can be updated without generating re-renders in other react components.
 
 **Example**
+
+Observable object with other observable objects
+
 ```YAML
-object # observable state
+people # observable state
 -- id # observable state
 -- age # observable state
 -- name # observable state
@@ -29,6 +32,9 @@ object # observable state
 ---- middleName # observable state
 ---- lastName # observable state
 ```
+
+Simple component consuming a input observable prop
+
 ```TSX
 const AgeComponent = ({ age }) => {
   const [ageState, setAgeState] = useObserver(age); // Observe the root state
@@ -40,9 +46,12 @@ const AgeComponent = ({ age }) => {
   );
 }
 ```
+
+Component observing the root observable object
+
 ```TSX
 const MyComponente = () => {
-  const [rootState, setRootState] = useObserver(object); // Observe the root state
+  const [rootState, setRootState] = useObserver(people); // Observe the root state
 
   return (
     <div>
@@ -79,7 +88,6 @@ const MyComponente = () => {
 |--|--|
 |`set`|Set a value to a observable object|
 |`isObservableProp`|Returns is a object is observable|
-|`useSetObserver`|Returns a react set state|
 
 
 # Usage
