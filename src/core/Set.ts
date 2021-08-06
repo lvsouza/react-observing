@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { IObservable } from '../interfaces'
+import { IObservable } from '../interfaces';
 
 /**
  * Allows you to assign values to observables
@@ -7,18 +7,15 @@ import { IObservable } from '../interfaces'
  * @param valOrUpdater Value or function to update the value
  * @returns void
  */
-export function set<T>(
-  observable: IObservable<T>,
-  valOrUpdater: ((currVal: T) => T) | T
-): void {
+export function set<T>(observable: IObservable<T>, valOrUpdater: ((currVal: T) => T) | T): void {
   if (typeof valOrUpdater === 'function') {
-    const updater = valOrUpdater as any
+    const updater = valOrUpdater as any;
     try {
-      observable.value = updater(observable.value)
+      observable.value = updater(observable.value);
     } catch (e) {
-      throw new Error(e)
+      throw new Error(e);
     }
   } else {
-    observable.value = valOrUpdater
+    observable.value = valOrUpdater;
   }
 }

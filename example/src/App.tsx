@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback } from 'react'
 
-import { IObservable, observe, useObserver, useObserverValue, useSetObserver, set } from 'react-observing'
-import { NameStore, TransformedNameStore } from './store/NameStore'
+import { IObservable, observe, useObserver, useObserverValue, useSetObserver } from 'react-observing'
+import { countNameSelector, NameStore, TransformedNameStore } from './store/NameStore'
 
 const LastNameInput = ({ store }: { store: IObservable<string> }) => {
   const [name, setName] = useObserver(store);
@@ -82,9 +82,11 @@ const FistNameInput = ({ store }: { store: IObservable<string> }) => {
 const ShowButton = ({ store }: { store: IObservable<() => void> }) => {
   const show = useObserverValue(store);
 
+  const counter = useObserverValue(countNameSelector);
+
   return (
     <button onClick={show}>
-      Show
+      Show {counter}
     </button>
   )
 }
@@ -94,15 +96,15 @@ export const App = () => {
   const setNames = useSetObserver(NameStore);
   const names = useObserverValue(NameStore);
 
-  const handleInitState = useCallback(() => {
+  /* const handleInitState = useCallback(() => {
     names.forEach(({ age, fistName, genre, lastName }) => {
       set(fistName, "First name");
       set(lastName, "Last name");
       set(genre, "Genre");
       set(age, "Age");
     });
-  }, [names]);
-  handleInitState();
+  }, [names]); */
+  //handleInitState();
 
   const handleAdd = useCallback(() => {
     setNames(oldNames => {
@@ -121,6 +123,7 @@ export const App = () => {
 
   return (
     <div>
+      <h1>{'counter'}</h1>
       <hr />
       <button onClick={handleAdd}>Add</button>
       <hr />

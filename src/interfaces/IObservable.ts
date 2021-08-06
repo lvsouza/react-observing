@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import { ISubscription } from './ISubscription'
+import { ISubscription } from './ISubscription';
 
 /**
  * Interface that defines an observable value

@@ -1,18 +1,18 @@
-import { observe } from './Observable'
-import { set } from './Set'
+import { observe } from './Observable';
+import { set } from './Set';
 
 describe('Set observable prop', () => {
-  const Store = observe(true)
+  const Store = observe(true);
 
   it('Can set observable prop to "false"', () => {
-    set(Store, false)
+    set(Store, false);
 
-    expect(Store.value).toBe(false)
-  })
+    expect(Store.value).toBe(false);
+  });
 
   it('Can set observable prop to "true"', () => {
-    set(Store, (old) => !old)
+    set(Store, (old) => !old);
 
-    expect(Store.value).toBe(true)
-  })
-})
+    expect(Store.value).toBe(true);
+  });
+});

@@ -9,5 +9,5 @@ export function isObservableProp(prop: any): boolean {
     prop?.subscribe !== null &&
     prop?.id !== undefined &&
     prop?.id !== null
-  )
+  );
 }

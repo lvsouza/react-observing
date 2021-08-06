@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-// eslint-disable-next-line no-unused-vars
-import { IObservable } from './../interfaces'
+import { IObservable } from './../interfaces';
 
 /**
  * Allows you to subscribe to changes in observable variables
@@ -11,28 +10,25 @@ import { IObservable } from './../interfaces'
 export function useObserverValue<T>(observable: IObservable<T>): T {
   const getValueState = useCallback((value: T): T | (() => T) => {
     if (typeof value === 'function') {
-      return () => value
+      return () => value;
     } else {
-      return value
+      return value;
     }
-  }, [])
+  }, []);
 
-  const refId = useRef<string>()
-  const [value, setValue] = useState<T>(getValueState(observable.value))
-
-  // typeof _onClick.value === 'function'
+  const [value, setValue] = useState<T>(getValueState(observable.value));
+  const refId = useRef<string>();
 
   useEffect(() => {
     if (refId.current !== observable.id && value !== observable.value) {
-      refId.current = observable.id
-      setValue(getValueState(observable.value))
+      refId.current = observable.id;
+      setValue(getValueState(observable.value));
     } else if (refId.current !== observable.id) {
-      refId.current = observable.id
+      refId.current = observable.id;
     }
 
-    return observable.subscribe((value) => setValue(getValueState(value)))
-      .unsubscribe
-  }, [observable])
+    return observable.subscribe((value) => setValue(getValueState(value))).unsubscribe;
+  }, [observable]);
 
-  return value
+  return value;
 }

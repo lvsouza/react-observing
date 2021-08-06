@@ -1,3 +1,3 @@
-export * from './interfaces'
-export * from './hooks'
-export * from './core'
+export * from './interfaces';
+export * from './hooks';
+export * from './core';
