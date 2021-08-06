@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback } from 'react'
 
-import { IObservable, observe, useObserver, useObserverValue, useSetObserver } from 'react-observing'
+import { IObservable, observe, useObserver, useObserverValue, useSetObserver, set } from 'react-observing'
 import { countNameSelector, NameStore, TransformedNameStore } from './store/NameStore'
 
 const LastNameInput = ({ store }: { store: IObservable<string> }) => {
@@ -96,15 +96,15 @@ export const App = () => {
   const setNames = useSetObserver(NameStore);
   const names = useObserverValue(NameStore);
 
-  /* const handleInitState = useCallback(() => {
+  const handleInitState = useCallback(() => {
     names.forEach(({ age, fistName, genre, lastName }) => {
       set(fistName, "First name");
       set(lastName, "Last name");
       set(genre, "Genre");
       set(age, "Age");
     });
-  }, [names]); */
-  //handleInitState();
+  }, [names]);
+  handleInitState();
 
   const handleAdd = useCallback(() => {
     setNames(oldNames => {

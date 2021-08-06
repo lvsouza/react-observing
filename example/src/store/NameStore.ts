@@ -38,21 +38,19 @@ export const firstNameSelector = selector({
   get: ({ get }) => {
     const names = get(NameStore);
 
-    const { length } = get(names[0].fistName)
-    console.log('fistName', length)
+    const { length } = get(names[0].fistName);
 
     return length;
   }
-})
+});
 
 export const lastNameSelector = selector(({ get }) => {
   const names = get(NameStore);
 
-  const { length } = get(names[0].lastName)
-  console.log('lastName', length)
+  const { length } = get(names[0].lastName);
 
   return length;
-})
+});
 
 export const countNameSelector = selector({
   get: ({ get }) => {
@@ -61,4 +59,4 @@ export const countNameSelector = selector({
 
     return `${firstName} - ${lastName}`;
   },
-})
+});
