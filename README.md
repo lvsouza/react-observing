@@ -5,7 +5,7 @@
 
 > Allow you observe objects, objects inside others objects, list, list inside others lists or class properties in react.
 
-[![NPM](https://img.shields.io/npm/v/react-observing.svg)](https://www.npmjs.com/package/react-observing) [![JavaScript Style Guide](https://img.shields.io/npm/dm/react-observing.svg)](https://www.npmjs.com/package/react-observing) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+ [![NPM](https://img.shields.io/npm/v/react-observing.svg)](https://www.npmjs.com/package/react-observing) [![JavaScript Style Guide](https://img.shields.io/npm/dm/react-observing.svg)](https://www.npmjs.com/package/react-observing) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
@@ -97,7 +97,7 @@ people # State
     myObservableState.subscribe(value => console.log(value)) // { unsubscribe, observableId, id }
     ```
 
-# Usage
+# Examples
 
 Example 1 - *Similar to simple react states*
 
@@ -105,9 +105,12 @@ Example 1 - *Similar to simple react states*
 import React from 'react';
 import { observe, useObserver } from 'react-observing';
 
+// Construct an observable
 const NameStore = observe("My name")
 
 export const App = () => {
+
+    // Allow listen or change the observable value
     const [name, setName] = useObserver(NameStore)
 
     return (
