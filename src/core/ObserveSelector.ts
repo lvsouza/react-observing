@@ -1,25 +1,28 @@
 import { IObservable, ISubscription } from '../interfaces';
 import { observe } from './Observable';
 
-interface ISelectorGetProps {
-  get: <O>(observable: IObservable<O>) => O
+/** Subscribe in the observable and return their current state */
+type TGetObservableValue = <O>(observable: IObservable<O>) => O;
+
+type TSelectorGetterOptions = {
+  /** Subscribe in the observable and return their current state */
+  get: TGetObservableValue;
 }
 
-type TSelectorGet<T> = (getProps: ISelectorGetProps) => T;
+type TSelectorGetter<T> = (options: TSelectorGetterOptions) => T;
 
-type TSelectorGetInlineProps<T> = TSelectorGet<T>;
-
-type TSelectorGetProps<T> = {
-  get: TSelectorGet<T>;
+type TSelectorGetterProps<T> = {
+  /** Accessor method get  */
+  get: TSelectorGetter<T>;
 }
 
-type TSelectorProps<T> = TSelectorGetProps<T> | TSelectorGetInlineProps<T>;
+type TSelectorProps<T> = TSelectorGetterProps<T> | TSelectorGetter<T>;
 
-type TSelectorInstance<T> = IObservable<T>;
+type TReadOnlySelectorState<T> = IObservable<T>;
 
-export function selector<T>(props: TSelectorGetProps<T>): TSelectorInstance<T>;
-export function selector<T>(props: TSelectorGetInlineProps<T>): TSelectorInstance<T>;
-export function selector<T>(props: TSelectorProps<T>): TSelectorInstance<T> {
+export function selector<T>(props: TSelectorGetter<T>): TReadOnlySelectorState<T>;
+export function selector<T>(props: TSelectorGetterProps<T>): TReadOnlySelectorState<T>;
+export function selector<T>(props: TSelectorProps<T>): TReadOnlySelectorState<T> {
   /** Get getResolver function */
   const getResolver = typeof props === 'object' ? props.get : props;
 
@@ -59,8 +62,8 @@ export function selector<T>(props: TSelectorProps<T>): TSelectorInstance<T> {
     get value() {
       return storedObservable.value;
     },
-    set value(value: T) {
-      storedObservable.value = value;
+    set value(_: T) {
+      throw new Error('Set value is not allowed in read only selector state');
     },
     subscribe: (callback: (val: T) => void) => {
       const subscription = storedObservable.subscribe(callback);
