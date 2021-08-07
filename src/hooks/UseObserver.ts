@@ -6,7 +6,7 @@ import { IObservable } from './../interfaces';
 /**
  * Allows you to subscribe to changes in observable variables
  * @param observable Variable that can be observed
- * @returns `[value, setValue]` - Returns a react state that, when changed, rerender the component
+ * @returns `[value, setValue]` - Returns a react state that, when changed, re render the component
  */
 export function useObserver<T>(observable: IObservable<T>): [T, TSetObservableState<T>] {
   const getValueState = useCallback((value: T): T | (() => T) => {
