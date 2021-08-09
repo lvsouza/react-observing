@@ -38,7 +38,14 @@ export const firstNameSelector = selector({
   get: ({ get }) => {
     const names = get(NameStore);
 
-    const { length } = get(names[0].fistName);
+    let length = 0;
+
+    names.forEach(name => {
+      length += get(name.fistName).length;
+      length += get(name.lastName).length;
+      length += get(name.genre).length;
+      length += get(name.age).length;
+    })
 
     return length;
   }
