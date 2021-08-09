@@ -8,32 +8,32 @@ type TGetObservableValue = <O>(observable: IObservable<O>) => O;
 /** Set a value to a observable */
 type TSetObservableValue = <O>(observable: IObservable<O>, valueOrUpdater: ((currVal: O) => O) | O) => void;
 
-export type TSelectorGetterOptions = {
+type TSelectorGetterOptions = {
   /** Subscribe in the observable and return their current state */
   get: TGetObservableValue;
 }
 
-export type TSelectorGetterSetterOptions = TSelectorGetterOptions & {
+type TSelectorGetterSetterOptions = TSelectorGetterOptions & {
   /** Set a value to a observable state */
   set: TSetObservableValue;
 }
 
-export type TSelectorStateGetter<T> = (options: TSelectorGetterOptions) => T;
-export type TSelectorStateSetter<T> = (options: TSelectorGetterSetterOptions, newValue: T) => void;
+type TSelectorStateGetter<T> = (options: TSelectorGetterOptions) => T;
+type TSelectorStateSetter<T> = (options: TSelectorGetterSetterOptions, newValue: T) => void;
 
-export type TReadOnlySelectorOptions<T> = {
+type TReadOnlySelectorOptions<T> = {
   /** Selector accessor method get  */
   get: TSelectorStateGetter<T>;
   set?: TSelectorStateSetter<T>;
 }
 
-export type TReadWriteSelectorOptions<T> = TReadOnlySelectorOptions<T> & {
+type TReadWriteSelectorOptions<T> = TReadOnlySelectorOptions<T> & {
   /** Selector accessor method set  */
   set: TSelectorStateSetter<T>;
 }
 
-export type TReadOnlySelectorState<T> = IObservable<T>;
-export type TReadWriteSelectorState<T> = IObservable<T>;
+type TReadOnlySelectorState<T> = IObservable<T>;
+type TReadWriteSelectorState<T> = IObservable<T>;
 
 /**
  * Build a read only selector state
