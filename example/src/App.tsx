@@ -79,13 +79,13 @@ const FistNameInput = ({ store }: { store: IObservable<string> }) => {
   )
 }
 
-const ShowButton = ({ store }: { store: IObservable<() => void> }) => {
-  const show = useObserverValue(store);
+const ShowButton = (_: { store: IObservable<() => void> }) => {
+  //const show = useObserverValue(store);
 
-  const counter = useObserverValue(countNameSelector);
+  const [counter, setCounter] = useObserver(countNameSelector);
 
   return (
-    <button onClick={show}>
+    <button onClick={() => setCounter(counter)}>
       Show {counter}
     </button>
   )

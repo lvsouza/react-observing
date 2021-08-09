@@ -1,1 +1,2 @@
-export type TSetObservableState<T> = (valOrUpdater: ((currVal: T) => T) | T) => void
+/** Set a value to a observable */
+export type TSetObservableState<T> = (valueOrUpdater: ((currVal: T) => T) | T) => void

@@ -1,36 +1,61 @@
 import { IObservable, ISubscription } from '../interfaces';
 import { observe } from './Observable';
+import { set } from './Set';
 
 /** Subscribe in the observable and return their current state */
 type TGetObservableValue = <O>(observable: IObservable<O>) => O;
 
-type TSelectorGetterOptions = {
+/** Set a value to a observable */
+type TSetObservableValue = <O>(observable: IObservable<O>, valueOrUpdater: ((currVal: O) => O) | O) => void;
+
+export type TSelectorGetterOptions = {
   /** Subscribe in the observable and return their current state */
   get: TGetObservableValue;
 }
 
-type TSelectorGetter<T> = (options: TSelectorGetterOptions) => T;
-
-type TSelectorGetterProps<T> = {
-  /** Accessor method get  */
-  get: TSelectorGetter<T>;
+export type TSelectorGetterSetterOptions = TSelectorGetterOptions & {
+  /** Set a value to a observable state */
+  set: TSetObservableValue;
 }
 
-type TSelectorProps<T> = TSelectorGetterProps<T> | TSelectorGetter<T>;
+export type TSelectorStateGetter<T> = (options: TSelectorGetterOptions) => T;
+export type TSelectorStateSetter<T> = (options: TSelectorGetterSetterOptions, newValue: T) => void;
 
-type TReadOnlySelectorState<T> = IObservable<T>;
+export type TReadOnlySelectorOptions<T> = {
+  /** Selector accessor method get  */
+  get: TSelectorStateGetter<T>;
+}
 
-export function selector<T>(props: TSelectorGetter<T>): TReadOnlySelectorState<T>;
-export function selector<T>(props: TSelectorGetterProps<T>): TReadOnlySelectorState<T>;
-export function selector<T>(props: TSelectorProps<T>): TReadOnlySelectorState<T> {
-  /** Get getResolver function */
-  const getResolver = typeof props === 'object' ? props.get : props;
+export type TReadWriteSelectorOptions<T> = TReadOnlySelectorOptions<T> & {
+  /** Selector accessor method set  */
+  set: TSelectorStateSetter<T>;
+}
+
+export type TReadOnlySelectorState<T> = IObservable<T>;
+export type TReadWriteSelectorState<T> = IObservable<T>;
+
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TSelectorStateGetter<T>): TReadOnlySelectorState<T>;
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TReadOnlySelectorOptions<T>): TReadOnlySelectorState<T>;
+/**
+ * Build a read and writable selector state
+ */
+export function selector<T>(props: TReadWriteSelectorOptions<T>): TReadWriteSelectorState<T>;
+
+export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOptions<T> | TReadWriteSelectorOptions<T>): TReadOnlySelectorState<T> | TReadWriteSelectorState<T> {
+  const getResolver: TSelectorStateGetter<T> = typeof props === 'object' ? props.get : props;
+  const setResolver: TSelectorStateSetter<T> = typeof props === 'object' ? (props as any).set : undefined;
 
   /** Store subscriptions to unsubscribe */
   const subscriptions: ISubscription[] = [];
 
   /** Store the calculated value */
-  const storedObservable = observe(getResolver({ get: getAndSubscribe }));
+  const storedObservable: IObservable<T> = observe<T>(getResolver({ get: getAndSubscribe }));
 
   function getAndSubscribe<O>(currObservable: IObservable<O>): O {
     /**
@@ -62,8 +87,12 @@ export function selector<T>(props: TSelectorProps<T>): TReadOnlySelectorState<T>
     get value() {
       return storedObservable.value;
     },
-    set value(_: T) {
-      throw new Error('Set value is not allowed in read only selector state');
+    set value(newValue: T) {
+      if (setResolver) {
+        setResolver({ get: (obs: any) => obs.value, set }, newValue);
+      } else {
+        throw new Error('Set value is not allowed in read only selector state');
+      }
     },
     subscribe: (callback: (val: T) => void) => {
       const subscription = storedObservable.subscribe(callback);
