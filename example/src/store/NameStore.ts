@@ -52,14 +52,14 @@ export const lastNameSelector = selector(({ get }) => {
   return length;
 });
 
-export const countNameSelector = selector<string>({
+export const countNameSelector = selector({
   get: ({ get }) => {
     const firstName = get(firstNameSelector);
     const lastName = get(lastNameSelector);
 
     return `${firstName} - ${lastName}`;
   },
-  set: ({ get, set }: TSelectorGetterSetterOptions, newValue) => {
+  set: ({ get, set }: TSelectorGetterSetterOptions, newValue: string) => {
     const firstName = get(firstNameSelector);
     const lastName = get(lastNameSelector);
 
@@ -68,9 +68,6 @@ export const countNameSelector = selector<string>({
     console.log('newValue', newValue)
 
     const names = get(NameStore);
-
     set(names[0].fistName, 'iiiiii')
-
-    console.log(set)
   }
 });
