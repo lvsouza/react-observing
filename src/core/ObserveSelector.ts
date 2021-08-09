@@ -24,7 +24,6 @@ type TSelectorStateSetter<T> = (options: TSelectorGetterSetterOptions, newValue:
 type TReadOnlySelectorOptions<T> = {
   /** Selector accessor method get  */
   get: TSelectorStateGetter<T>;
-  set?: TSelectorStateSetter<T>;
 }
 
 type TReadWriteSelectorOptions<T> = TReadOnlySelectorOptions<T> & {
@@ -36,17 +35,17 @@ type TReadOnlySelectorState<T> = IObservable<T>;
 type TReadWriteSelectorState<T> = IObservable<T>;
 
 /**
- * Build a read only selector state
+ * Build a read and writable selector state
  */
-export function selector<T>(props: TSelectorStateGetter<T>): TReadOnlySelectorState<T>;
+export function selector<T>(props: TReadWriteSelectorOptions<T>): TReadWriteSelectorState<T>;
 /**
  * Build a read only selector state
  */
 export function selector<T>(props: TReadOnlySelectorOptions<T>): TReadOnlySelectorState<T>;
 /**
- * Build a read and writable selector state
+ * Build a read only selector state
  */
-export function selector<T>(props: TReadWriteSelectorOptions<T>): TReadWriteSelectorState<T>;
+export function selector<T>(props: TSelectorStateGetter<T>): TReadOnlySelectorState<T>;
 
 export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOptions<T> | TReadWriteSelectorOptions<T>): TReadOnlySelectorState<T> | TReadWriteSelectorState<T> {
   const getResolver: TSelectorStateGetter<T> = typeof props === 'object' ? props.get : props;
