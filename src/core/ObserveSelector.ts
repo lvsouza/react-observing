@@ -24,6 +24,7 @@ export type TSelectorStateSetter<T> = (options: TSelectorGetterSetterOptions, ne
 export type TReadOnlySelectorOptions<T> = {
   /** Selector accessor method get  */
   get: TSelectorStateGetter<T>;
+  set?: TSelectorStateSetter<T>;
 }
 
 export type TReadWriteSelectorOptions<T> = TReadOnlySelectorOptions<T> & {

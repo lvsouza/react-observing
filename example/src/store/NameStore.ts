@@ -1,4 +1,4 @@
-import { observe, selector, transform, TSelectorGetterSetterOptions } from "react-observing"
+import { observe, selector, transform } from "react-observing"
 
 export const NameStore = observe([{
   show: observe(() => console.log('Try')),
@@ -66,7 +66,7 @@ export const countNameSelector = selector({
 
     return `${firstName} - ${lastName}`;
   },
-  set: ({ get, set }: TSelectorGetterSetterOptions, newValue: string) => {
+  set: ({ get, set }, newValue) => {
     const firstName = get(firstNameSelector);
     const lastName = get(lastNameSelector);
 
