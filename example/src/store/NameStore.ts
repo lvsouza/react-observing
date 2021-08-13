@@ -1,4 +1,4 @@
-import { observe, selector, selectorWithParams, transform } from "react-observing"
+import { observe, selector, selectorWithParams_UNSTABLE, transform } from "react-observing"
 
 export const NameStore = observe([{
   show: observe(() => console.log('Try')),
@@ -79,7 +79,7 @@ export const _countNameSelector = selector<string>({
   }
 });
 
-export const countNameSelector = selectorWithParams<string, { teste: string }>({
+export const countNameSelector = selectorWithParams_UNSTABLE<string, { teste: string }>({
   get: ({ teste }) => ({ get }) => {
     const firstName = get(firstNameSelector);
     const lastName = get(lastNameSelector);

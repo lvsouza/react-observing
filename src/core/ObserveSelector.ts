@@ -31,7 +31,9 @@ type TReadWriteSelectorOptions<T> = TReadOnlySelectorOptions<T> & {
   set: TSelectorStateSetter<T>;
 }
 
-type TReadOnlySelectorState<T> = IObservable<T>;
+type TReadOnlySelectorState<T> = IObservable<T> & {
+  readonly value: T;
+};
 type TReadWriteSelectorState<T> = IObservable<T>;
 
 /**
