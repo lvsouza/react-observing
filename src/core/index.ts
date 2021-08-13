@@ -1,3 +1,4 @@
+export * from './ObserveSelectorWithParams';
 export * from './IsObservableProp';
 export * from './ObserveSelector';
 export * from './Observable';

@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback } from 'react'
 
 import { IObservable, observe, useObserver, useObserverValue, useSetObserver, set } from 'react-observing'
-import { countNameSelector, NameStore, TransformedNameStore } from './store/NameStore'
+import { _countNameSelector, NameStore, TransformedNameStore } from './store/NameStore'
 
 const LastNameInput = ({ store }: { store: IObservable<string> }) => {
   const [name, setName] = useObserver(store);
@@ -80,9 +80,8 @@ const FistNameInput = ({ store }: { store: IObservable<string> }) => {
 }
 
 const ShowButton = (_: { store: IObservable<() => void> }) => {
-  //const show = useObserverValue(store);
-
-  const [counter, setCounter] = useObserver(countNameSelector);
+  const [counter, setCounter] = useObserver(_countNameSelector);
+  //const [counter, setCounter] = useObserver(countNameSelector('teste', { teste: 'teste' }));
 
   return (
     <button onClick={() => setCounter(counter)}>

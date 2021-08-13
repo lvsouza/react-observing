@@ -134,14 +134,14 @@ const PeopleStore = {
 }
 
 // First name custom input component
-// This component will render in every input change 
+// This component will render in every input change
 const FirstNameInput = () => {
     const [firstName, setFirstName] = useObserver(PeopleStore.firstName)
     return <input value={firstName} onChange={e => setFirstName(e.target.value)} />
 }
 
 // Last name custom input component
-// This component will render in every input change 
+// This component will render in every input change
 const LastNameInput = () => {
     const [lastName, setLastName] = useObserver(PeopleStore.lastName)
     return <input value={lastName} onChange={e => setLastName(e.target.value)} />
@@ -184,20 +184,20 @@ const PeoplesStore = observe([
 ])
 
 // First name custom input component
-// This component will render in every input change 
+// This component will render in every input change
 const FirstNameInput = ({ people }) => {
     const [firstName, setFirstName] = useObserver(people.firstName)
     return <input value={firstName} onChange={e => setFirstName(e.target.value)} />
 }
 
 // Last name custom input component
-// This component will render in every input change 
+// This component will render in every input change
 const LastNameInput = ({ people }) => {
     const [lastName, setLastName] = useObserver(people.lastName)
     return <input value={lastName} onChange={e => setLastName(e.target.value)} />
 }
 
-// This component will be rendered every time the number of items in the array is changed 
+// This component will be rendered every time the number of items in the array is changed
 export const App = () => {
     const [peoples, setPeoples] = useObserver(PeoplesStore)
 
