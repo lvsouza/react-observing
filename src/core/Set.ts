@@ -12,8 +12,8 @@ export function set<T>(observable: IObservable<T>, valOrUpdater: ((currVal: T) =
     const updater = valOrUpdater as any;
     try {
       observable.value = updater(observable.value);
-    } catch (e) {
-      throw new Error(e);
+    } catch (e: any) {
+      throw new Error(e.message);
     }
   } else {
     observable.value = valOrUpdater;

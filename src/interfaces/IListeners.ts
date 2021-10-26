@@ -5,9 +5,9 @@ export interface IListeners<T> {
   /**
    * Listener identification
    */
-  id: string
+  id: string;
   /**
    * Stores the function that should be executed when there is an observable value change
    */
-  emit: (data: T) => void
+  emit: (data: T) => void;
 }

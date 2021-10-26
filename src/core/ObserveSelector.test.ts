@@ -1,5 +1,5 @@
-import { observe } from './Observable';
 import { selector } from './ObserveSelector';
+import { observe } from './Observable';
 import { set } from './Set';
 
 describe('New readonly selector with arrow function', () => {
@@ -79,29 +79,21 @@ describe('New readwrite selector', () => {
 
   it('is "false - false"', () => {
     set(storeSelector, 'false - false');
-    setTimeout(() => {
-      expect(storeSelector.value).toBe('false - false');
-    }, 0);
+    expect(storeSelector.value).toBe('false - false');
   });
 
   it('is "false - true"', () => {
     set(storeSelector, 'false - true');
-    setTimeout(() => {
-      expect(storeSelector.value).toBe('false - true');
-    }, 0);
+    expect(storeSelector.value).toBe('false - true');
   });
 
   it('is "true - true"', () => {
     set(storeSelector, 'true - true');
-    setTimeout(() => {
-      expect(storeSelector.value).toBe('true - true');
-    }, 0);
+    expect(storeSelector.value).toBe('true - true');
   });
 
   it('is "true - false"', () => {
     set(storeSelector, 'true - false');
-    setTimeout(() => {
-      expect(storeSelector.value).toBe('true - false');
-    }, 0);
+    expect(storeSelector.value).toBe('true - false');
   });
 });

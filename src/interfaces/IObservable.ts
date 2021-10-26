@@ -6,16 +6,16 @@ import { ISubscription } from './ISubscription';
  * @param T Observable value type
  */
 export interface IObservable<T> {
-  id: string
+  id: string;
   /**
    * Static value.
    * When making an assignment on this property, all
    * subscribers to that amount will hear
    */
-  value: T
+  value: T;
   /**
    * Enables enrollment in value changes
    * @param callback Function performed when there is a change in the observable value
    */
-  subscribe(callback: (val: T) => void): ISubscription
+  subscribe(callback: (val: T) => void): ISubscription;
 }

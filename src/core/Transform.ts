@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { IListeners, IObservable, ISubscription, ITransformedObservable } from './../interfaces';
 
@@ -11,7 +11,7 @@ export function transform<T, K>(observable: IObservable<T>, readTransformFunctio
   /**
    *
    */
-  const transformId = uuidv4();
+  const transformId = uuid();
   /**
    * Stores all listeners that must be notified that the value changes
    */
@@ -37,7 +37,7 @@ export function transform<T, K>(observable: IObservable<T>, readTransformFunctio
    * @param fn Function performed when the value changes
    */
   const subscribe = (fn: (val: K) => void): ISubscription => {
-    const newListener = { id: uuidv4(), emit: fn };
+    const newListener = { id: uuid(), emit: fn };
     listeners.push(newListener);
 
     return {
