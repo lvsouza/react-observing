@@ -27,8 +27,8 @@ export function useObserver<T>(observable: IObservable<T>): [T, TSetObservableSt
 
       try {
         observable.value = updater(handleGetValue(observable.value));
-      } catch (e) {
-        throw new Error(e);
+      } catch (e: any) {
+        throw new Error(e.message);
       }
     } else {
       observable.value = valOrUpdater;

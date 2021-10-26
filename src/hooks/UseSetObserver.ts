@@ -26,8 +26,8 @@ export function useSetObserver<T>(observable: IObservable<T>): TSetObservableSta
       const updater = valOrUpdater as any;
       try {
         observable.value = updater(getValueState(observable.value));
-      } catch (e) {
-        throw new Error(e);
+      } catch (e: any) {
+        throw new Error(e.message);
       }
     } else {
       observable.value = valOrUpdater;
