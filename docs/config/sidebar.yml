@@ -50,7 +50,7 @@
   items:
     - label: Observable pattern
       link: '/more/observable-pattern'
-    - label: Roadmap
+    - label: Road map
       link: '/more/roadmap'
     - label: 'Github'
       link: 'https://github.com/lvsouza/react-observing'

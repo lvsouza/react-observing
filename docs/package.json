@@ -28,6 +28,8 @@
     "build": "gatsby build",
     "start": "gatsby develop",
     "serve": "gatsby serve",
-    "clean": "gatsby clean"
+    "clean": "gatsby clean",
+    "predeploy": "gatsby build",
+    "deploy": "firebase deploy"
   }
 }

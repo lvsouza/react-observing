@@ -13,7 +13,9 @@ This library helps in managing complex states. Allowing you to create separate s
 
 ```bash
 npm install --save react-observing
+```
 or
+```bash
 yarn add react-observing
 ```
 
