@@ -1,54 +1,44 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
 
-import { TSetObservableState } from '../types';
+import { TSetObservableState, TUpdater, TValueOrUpdater } from '../types';
 import { IObservable } from './../interfaces';
 
 /**
  * Allows you to subscribe to changes in observable variables
+ *
  * @param observable Variable that can be observed
  * @returns `[value, setValue]` - Returns a react state that, when changed, re render the component
  */
 export function useObserver<T>(observable: IObservable<T>): [T, TSetObservableState<T>] {
-  const handleGetValue = useCallback((value: T): T | (() => T) => {
-    if (typeof value === 'function') {
-      return () => value;
-    } else {
-      return value;
-    }
-  }, []);
+  const [, forceUpdate] = useReducer(() => [], []);
+
+  const stateId = useRef<string>();
 
   /**
    * Change the value
+   *
    * @param valOrUpdater Value or function to update the value
    */
-  const handleSetValue: TSetObservableState<T> = useCallback((valOrUpdater: ((currVal: T) => T) | T) => {
+  const handleSetValue: TSetObservableState<T> = useCallback((valOrUpdater: TValueOrUpdater<T>) => {
     if (typeof valOrUpdater === 'function') {
-      const updater = valOrUpdater as any;
+      const updater = valOrUpdater as TUpdater<T>;
 
-      try {
-        observable.value = updater(handleGetValue(observable.value));
-      } catch (e: any) {
-        throw new Error(e.message);
-      }
+      observable.value = updater(observable.value);
     } else {
       observable.value = valOrUpdater;
     }
-  }, [observable.value, handleGetValue]);
-
-
-  const [value, setValue] = useState<T>(handleGetValue(observable.value));
-  const refId = useRef<string>();
+  }, [observable.value]);
 
   useEffect(() => {
-    if (refId.current !== observable.id && value !== observable.value) {
-      refId.current = observable.id;
-      setValue(handleGetValue(observable.value));
-    } else if (refId.current !== observable.id) {
-      refId.current = observable.id;
+    if (stateId.current !== observable.id) {
+      stateId.current = observable.id;
+      forceUpdate();
     }
 
-    return observable.subscribe((value) => setValue(handleGetValue(value))).unsubscribe;
+    const subscription = observable.subscribe(() => forceUpdate());
+
+    return subscription.unsubscribe;
   }, [observable]);
 
-  return [value, handleSetValue];
+  return [observable.value, handleSetValue];
 }

@@ -8,42 +8,32 @@ import { IListeners, IObservable, ISubscription } from './../interfaces';
  * @returns IObservable<T> Observable
  */
 export function observe<T>(initialValue: T): IObservable<T> {
+  const storedListeners: IListeners<T>[] = [];
   const observerId = uuid();
 
-  /**
-   * Stores all listeners that must be notified that the value changes
-   */
-  const listeners: IListeners<T>[] = [];
-
-  /**
-   * Allows changing the stored value and notifying all listeners
-   * @param newValue New value to be stored
-   */
-  const setValue = (newValue: T) => {
+  const setCurrentValue = (newValue: T) => {
     initialValue = newValue;
-    listeners.forEach((listener) => listener.emit(newValue));
+    storedListeners.forEach((listener) => listener.emit(newValue));
   };
 
-  /**
-   * Returns the stored value
-   */
-  const getValue = () => initialValue;
+  const getCurrentValue = () => initialValue;
 
   /**
    * Creates the subscription for the value
+   *
    * @param fn Function performed when the value changes
    */
   const subscribe = (fn: (val: T) => void): ISubscription => {
     const newListener = { id: uuid(), emit: fn };
-    listeners.push(newListener);
+    storedListeners.push(newListener);
 
     return {
       observerId,
       id: newListener.id,
       unsubscribe: () => {
-        const indexToRemove = listeners.indexOf(newListener);
+        const indexToRemove = storedListeners.findIndex(listener => listener.id === newListener.id);
         if (indexToRemove < 0) return;
-        listeners.splice(indexToRemove, 1);
+        storedListeners.splice(indexToRemove, 1);
       }
     };
   };
@@ -52,10 +42,10 @@ export function observe<T>(initialValue: T): IObservable<T> {
     subscribe,
     id: observerId,
     get value() {
-      return getValue();
+      return getCurrentValue();
     },
     set value(value: T) {
-      setValue(value);
+      setCurrentValue(value);
     }
   };
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 
 import { IObservable } from './../interfaces';
 
@@ -8,27 +8,20 @@ import { IObservable } from './../interfaces';
  * @returns `value` - Returns a react state that, when changed, rerender the component
  */
 export function useObserverValue<T>(observable: IObservable<T>): T {
-  const getValueState = useCallback((value: T): T | (() => T) => {
-    if (typeof value === 'function') {
-      return () => value;
-    } else {
-      return value;
-    }
-  }, []);
+  const [, forceUpdate] = useReducer(() => [], []);
 
-  const [value, setValue] = useState<T>(getValueState(observable.value));
-  const refId = useRef<string>();
+  const stateId = useRef<string>();
 
   useEffect(() => {
-    if (refId.current !== observable.id && value !== observable.value) {
-      refId.current = observable.id;
-      setValue(getValueState(observable.value));
-    } else if (refId.current !== observable.id) {
-      refId.current = observable.id;
+    if (stateId.current !== observable.id) {
+      stateId.current = observable.id;
+      forceUpdate();
     }
 
-    return observable.subscribe((value) => setValue(getValueState(value))).unsubscribe;
+    const subscription = observable.subscribe(() => forceUpdate());
+
+    return subscription.unsubscribe;
   }, [observable]);
 
-  return value;
+  return observable.value;
 }

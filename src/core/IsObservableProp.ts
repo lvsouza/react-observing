@@ -1,13 +1,12 @@
 /**
- * Valide if a propertie is observable
+ * Valide if a property is observable
  * @param prop any Value to validate
  * @returns boolean
  */
 export function isObservableProp(prop: any): boolean {
   return (
-    prop?.subscribe !== undefined &&
-    prop?.subscribe !== null &&
-    prop?.id !== undefined &&
-    prop?.id !== null
+    typeof prop === 'object' &&
+    typeof prop?.id === 'string' &&
+    typeof prop?.subscribe === 'function'
   );
 }
