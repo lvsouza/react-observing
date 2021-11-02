@@ -1,0 +1,84 @@
+import Navigation from '@rocketseat/gatsby-theme-docs/src/components/Docs/PostNav'
+
+# React observing
+
+React observing is a performance-focused library for state management in React.
+Using hooks and state builders, you can build a complex state management.
+Keeping your app really fast, this library re-render only a component that need a re-render.
+
+## Build a observable state
+
+```tsx
+const Store = observe('value')
+```
+
+```tsx
+const Store = {
+  prop1: observe('value'),
+  prop2: observe('value'),
+}
+```
+
+```tsx
+const Store = observe({
+  prop1: observe('value'),
+  prop2: observe('value'),
+})
+```
+
+```tsx
+const Store = observe([
+  observe('value'),
+])
+```
+
+> To work correctly all properties that are States must be mandatory. [See more](/more/mandatory-properties)
+
+## Each property as state
+
+You can have properties that are states and properties that are not states.
+You can do what you want.
+
+```yaml
+people # State
+-- id # State
+-- age # State
+-- name # State
+-- more # State
+---- middleName # State
+---- lastName # State
+```
+Or
+```yaml
+people # State
+-- id # State
+-- age # State
+-- name # State
+-- more # NOT a state
+---- middleName # State
+---- lastName # NOT a state
+```
+
+
+## Array of states
+
+Each state can be updated separately without interfering with the others.
+
+```yaml
+peoples # State
+-- [0]
+---- name # State
+-- [1]
+---- name # State
+-- [2]
+---- name # State
+```
+
+
+<Navigation
+  prev={null}
+  next={{
+    label: 'Installation',
+    link: '/installation',
+  }}
+/>

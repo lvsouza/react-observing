@@ -1,0 +1,56 @@
+# Sidebar navigation
+
+- label: 'Overview'
+  link: '/'
+- label: 'Installation'
+  link: '/installation'
+- label: 'Quick start'
+  link: '/quick-start'
+
+- label: 'State'
+  items:
+    - label: 'observe'
+      link: '/state/observe'
+    - label: 'transform'
+      link: '/state/transform'
+    - label: 'selector (preview)'
+      link: '/state/selector'
+
+- label: 'hooks'
+  items:
+    - label: 'useObserver'
+      link: '/hooks/use-observer'
+    - label: 'useObserverValue'
+      link: '/hooks/use-observer-value'
+    - label: 'useSetObserver'
+      link: '/hooks/use-set-observer'
+
+- label: 'extra functions'
+  items:
+    - label: 'set'
+      link: '/extra/set'
+    - label: 'isObservableProp'
+      link: '/extra/is-observable-prop'
+
+- label: 'typescript'
+  items:
+    - label: 'IObservable'
+      link: '/typescript/i-observable'
+    - label: 'ITransformedObservable'
+      link: '/typescript/i-transformed-observable'
+    - label: 'ISubscription'
+      link: '/typescript/i-subscription'
+
+- label: Examples
+  items:
+    - label: 'Counter'
+      link: '/examples/counter'
+
+- label: More
+  items:
+    - label: Observable pattern
+      link: '/more/observable-pattern'
+    - label: Roadmap
+      link: '/more/roadmap'
+    - label: 'Github'
+      link: 'https://github.com/lvsouza/react-observing'

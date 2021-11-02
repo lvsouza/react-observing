@@ -1,0 +1,228 @@
+---
+title: 'Quick start'
+description: 'How to get started with React observing. You will learn how to build your first observable state and integrate with React.'
+---
+
+This page explains how to get started with React observing. You will learn how to build
+your first observable state and **integrate with React**.
+
+---
+
+## Simple input
+
+Let's get started by creating a observable state.
+
+_Here we are going to call our state Name**Store**, because it is being shared among more files. But you can name it whatever you like._
+
+
+```tsx lineNumbers
+// ./NameStore.ts
+
+import { observe } from 'react-observing'
+
+export NameStore = observe('some text');
+
+```
+
+Now let's use the state in an input component with one of the available hooks.
+`useObserver` allows you to retrieve the state and change it if necessary.
+
+> This hook is very similar to react's `useState` hook.
+
+```tsx lineNumbers
+// ./Component1.tsx
+
+import React from 'react'
+import { useObserver } from 'react-observing'
+
+import { NameStore } from './NameStore'
+
+export const Component1 = () => {
+  const [name, setName] = useObserver(NameStore)
+
+  return (
+    <input
+      value={name}
+      placeholder="Type your name"
+      onChange={e => setName(e.target.value)}
+    />
+  )
+}
+
+```
+
+Having created the input component, let's use the component twice.
+Note that the result will be that when you update the name in one component, the second will also be updated.
+
+This happens because when updating the value in the NameStore all components that are on screen with a `useObserver` are listening for state changes.
+
+```tsx lineNumbers
+// ./App.tsx
+
+import React from 'react'
+
+import { Component1 } from './Component1'
+
+export const App = () => {
+
+  return (
+    <>
+     <Component1 />
+     <Component1 />
+    </>
+  )
+}
+
+```
+
+---
+
+## Properties as states
+
+
+Let's get started by creating a object with observable properties.
+
+> To work correctly all properties that are States must be mandatory. [See more](/more/mandatory-properties)
+
+```tsx lineNumbers
+// ./NameAndLastNameStore.ts
+
+import { observe } from 'react-observing'
+
+export NameAndLastNameStore = {
+  name: observe('Juca'),
+  lastName: observe('Foo')
+};
+
+```
+
+Now let's create two input components, one will be linked to the first name and the other to the last name.
+
+```tsx lineNumbers
+// ./Inputs.tsx
+
+import React from 'react'
+import { useObserver } from 'react-observing'
+
+import { NameAndLastNameStore } from './NameAndLastNameStore'
+
+export const InputName = () => {
+  const [name, setName] = useObserver(NameAndLastNameStore.name)
+
+  return <input
+    value={name}
+    onChange={e => setName(e.target.value)}
+  />
+}
+
+export const InputLastName = () => {
+  const [lastName, setLastName] = useObserver(NameAndLastNameStore.lastName)
+
+  return <input
+    value={lastName}
+    onChange={e => setLastName(e.target.value)}
+  />
+}
+
+```
+
+Now, when we change the input values, only the input that has the link to the property will be re-rendered.
+
+The `NameAndLastNameStore` object could be a state too, and in the `App` we would have a `useObserver` on the object.
+In this scenario, you would have to pass properties that are state as `props` in the input components.
+
+```tsx lineNumbers
+// ./App.tsx
+
+import React from 'react'
+
+import { InputName, InputLastName } from './Inputs'
+
+export const App = () => {
+
+  return (
+    <>
+     <InputName />
+     <InputLastName />
+    </>
+  )
+}
+
+```
+
+---
+
+## Array of states
+
+`react-observing` works very well with lists of states.
+
+In react, you normally create a `state` which is an array,
+and to update a specific item of that array you are
+required to update the entire array.
+
+Below see how your application can be much more performant
+with the list of states.
+
+
+Here we will create a list, which is a state, which contains several states of type string.
+
+```tsx lineNumbers
+// ./NamesStore.ts
+
+import { observe } from 'react-observing'
+
+export NamesStore = observe([
+  observe('Juca'),
+  observe('Pedro'),
+  observe('Paulo'),
+]);
+```
+
+See that here we are going to create an input component, which must receive as `prop` a state of type string.
+It is no longer necessary to access the store directly, but if necessary it is still possible.
+
+```tsx lineNumbers
+// ./Input.tsx
+
+import React from 'react'
+import { useObserver, IObservable } from 'react-observing'
+
+interface IInputProps {
+  name: IObservable<string>;
+}
+export const Input: React.FC<IInputProps> = ({ name }) => {
+  const [name, setName] = useObserver(name)
+
+  return <input
+    value={name}
+    onChange={e => setName(e.target.value)}
+  />
+}
+
+```
+
+Here we are going to use `useObserver` on our store and map the array to a list of the `Input` component we created.
+
+In this scenario, when we change the value of any input on the screen, we will generate a re-render only on the components that depend on that state.
+The other components generated by our mapping will not suffer any kind of effect.
+
+```tsx lineNumbers
+// ./App.tsx
+
+import React from 'react'
+import { useObserver } from 'react-observing'
+
+import { NamesStore } from './NamesStore'
+import { Input } from './Input'
+
+export const App = () => {
+  const [names, setNames] = useObserver(NamesStore)
+
+  return (
+    <>
+      {names.map(name => <Input name={name} />)}
+    </>
+  )
+}
+
+```
