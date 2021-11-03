@@ -3,5 +3,17 @@ title: ISubscription
 description: Representation of a subscription.
 ---
 
+## Overview
 
+This is the definition of the object returned in a subscription.
+
+### Definition
+
+```ts
+interface ISubscription {
+  id: string;
+  observerId: string;
+  unsubscribe(): void;
+}
+```
 

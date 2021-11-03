@@ -3,5 +3,18 @@ title: IObservable<T>
 description: Define a observable object.
 ---
 
+## Overview
+
+This is the default type of an observable object.
+
+### Definition
+
+```ts
+interface IObservable<T> {
+  id: string;
+  value: T;
+  subscribe(callback: (val: T) => void): ISubscription;
+}
+```
 
 
