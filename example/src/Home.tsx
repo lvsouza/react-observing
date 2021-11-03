@@ -1,3 +1,4 @@
+import { InputName } from './components/InputNome';
 import { Counter } from './components/Counter';
 
 
@@ -8,6 +9,8 @@ export const Home = () => {
       Componentes
       <hr />
       <Counter />
+      <hr />
+      <InputName />
       <hr />
     </div>
   );

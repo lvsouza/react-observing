@@ -1,21 +1,26 @@
 import { v4 as uuid } from 'uuid';
 
-import { IListeners, IObservable, ISubscription, ITransformedObservable, ITransformedReadOnlyObservable } from './../interfaces';
+import { IObservable, ISubscription, ITransformedObservable, ITransformedReadOnlyObservable } from './../interfaces';
 
 /**
- * Allows us to subscribe to changes to a value
- * @param initialValue - `T` Default value
- * @returns IObservable<T> Observable
+ * Allows us to subscribe to other observable changes
+ *
+ * @param observable - Observable to transform
+ * @param transformAndGetValue - Function to get and transform the observable value
+ * @returns ITransformedReadOnlyObservable<K>
  */
 export function transform<T, K>(observable: IObservable<T>, transformAndGetValue: (currValue: T) => K): ITransformedReadOnlyObservable<K>;
+/**
+ * Allows us to subscribe to other observable changes
+ *
+ * @param observable - Observable to transform
+ * @param transformAndGetValue - Function to get and transform the observable value
+ * @param transformAndSetValue - Function to transform and set the observable value
+ * @returns ITransformedObservable<K>
+ */
 export function transform<T, K>(observable: IObservable<T>, transformAndGetValue: (currValue: T) => K, transformAndSetValue: (currValue: K) => T): ITransformedObservable<K>;
 export function transform<T, K>(observable: IObservable<T>, transformAndGetValue: (currValue: T) => K, transformAndSetValue?: (currValue: K) => T): ITransformedObservable<K> {
-  const storedListeners: IListeners<K>[] = [];
   const transformId = uuid();
-
-  observable.subscribe(newValue => {
-    storedListeners.forEach(listener => listener.emit(transformAndGetValue(newValue)));
-  });
 
   const setCurrentValue = (newValue: K) => {
     if (transformAndSetValue) {
@@ -35,17 +40,12 @@ export function transform<T, K>(observable: IObservable<T>, transformAndGetValue
    * @param fn Function performed when the value changes
    */
   const subscribe = (fn: (val: K) => void): ISubscription => {
-    const newListener = { id: uuid(), emit: fn };
-    storedListeners.push(newListener);
+    const subscription = observable.subscribe(value => fn(transformAndGetValue(value)));
 
     return {
-      id: newListener.id,
+      id: subscription.id,
       observerId: transformId,
-      unsubscribe: () => {
-        const indexToRemove = storedListeners.findIndex(listener => listener.id === newListener.id);
-        if (indexToRemove < 0) return;
-        storedListeners.splice(indexToRemove, 1);
-      }
+      unsubscribe: subscription.unsubscribe,
     };
   };
 
