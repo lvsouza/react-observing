@@ -3,5 +3,20 @@ title: Counter
 description: How to create a counter with react observing.
 ---
 
+Here is an example of how to use react observing to build a simple counter.
 
+```ts lineNumbers
+import { observe, useObserver } from 'react-observing'
 
+const counterObservable = observe(0)
+
+const App = () => {
+  const [counter, setCounter] = useObserver(counterObservable)
+
+  return (
+    <button onClick={() => setCounter(counter + 1)}>
+      Add +1 in {counter}
+    </button>
+  )
+}
+```

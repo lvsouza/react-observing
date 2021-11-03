@@ -3,3 +3,40 @@ title: useObserverValue
 description: Returns a react state from a observable object
 ---
 
+## Overview
+
+The `useObserverValue` allows easy subscribing to an observable object.
+It automates all the manual process that would be needed.
+
+The `useObserverValue` is very similar to the `useObserver` hook.
+However, it only returns the state and not a function to change that state.
+
+### useObserver vs useObserverValue
+
+The `useObserver` hook by default returns a state and a function to change it.
+When you only want the state value and are not interested in changing it, it is recommended to use this method.
+It is simpler and makes the application more optimized.
+
+### Definition
+
+```ts
+function useObserverValue<T>(observable: IObservable<T>): T
+```
+
+## Examples
+
+### Counter
+
+```ts lineNumbers highlight={6}
+import { observe, useObserverValue } from 'react-observing'
+
+const counterObservable = observe(10)
+
+const App = () => {
+  const counter = useObserverValue(counterObservable)
+
+  return (
+    <p>Counter is in {counter}</p>
+  )
+}
+```

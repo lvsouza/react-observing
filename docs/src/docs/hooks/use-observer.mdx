@@ -3,3 +3,35 @@ title: useObserver
 description: Returns a react state and set state from a observable object
 ---
 
+## Overview
+
+The `useObserverValue` allows easy subscribing to an observable object.
+It automates all the manual process that would be needed.
+
+The `useObserver` is very similar to the native `useState` react hook.
+
+### Definition
+
+```ts
+function useObserver<T>(observable: IObservable<T>): [T, TSetObservableState<T>]
+```
+
+## Examples
+
+### Counter
+
+```ts lineNumbers highlight={6}
+import { observe, useObserver } from 'react-observing'
+
+const counterObservable = observe(0)
+
+const App = () => {
+  const [counter, setCounter] = useObserver(counterObservable)
+
+  return (
+    <button onClick={() => setCounter(counter + 1)}>
+      Add +1 in {counter}
+    </button>
+  )
+}
+```

@@ -3,3 +3,40 @@ title: useSetObserver
 description: Returns a react set state from a observable object
 ---
 
+## Overview
+
+O `useSetObserver` retorna apenas um metodo que pode alterar o valor do observable.
+
+Using this hook is recommended to optimize your application's performance.
+Since the returned method has no state effects.
+This way, your component won't have a new render stream every time the set is executed.
+
+### useObserver vs useSetObserver
+
+`useObserver` always returns a state and a method for changing the state.
+Whenever the state change happens, a new rendering stream happens,
+this flow can be avoided using this hook.
+
+### Definition
+
+```ts
+function useSetObserver<T>(observable: IObservable<T>): TSetObservableState<T>
+```
+
+## Examples
+
+### Counter
+
+```ts lineNumbers highlight={6}
+import { observe, useSetObserver } from 'react-observing'
+
+const counterObservable = observe(10)
+
+const App = () => {
+  const setCounter = useSetObserver(counterObservable)
+
+  return (
+    <button onClick={() => setCounter(old => old + 1)}>Add + 1</button>
+  )
+}
+```
