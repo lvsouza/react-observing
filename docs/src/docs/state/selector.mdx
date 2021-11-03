@@ -3,3 +3,39 @@ title: selector
 description: Creating a new observable object from other observable objects or list of observable objects
 ---
 
+> The `selector` is in **preview** right now. **NOT** recommended for production.
+
+## Overview
+
+A selector represents a piece of derived state.
+You can think of derived state as the output of passing state to a pure function that modifies the given state in some way.
+
+A selector allows you to generate one observable from several others.
+In some cases it will be necessary to have an observable that is derived from several other observables.
+This is exactly the purpose of the selector.
+
+The selector is very similar to [transform](/state/transform), the only difference is that a selector allows for several other observables.
+
+If only a `get` function is provided, the selector is read-only and returns a `TReadOnlySelectorState` object.
+If a set is also provided, it returns a writeable `TReadWriteSelectorState` object.
+
+### Definition
+
+```ts
+/**
+ * Build a read and writable selector state
+ */
+export function selector<T>(props: TReadWriteSelectorOptions<T>): TReadWriteSelectorState<T>;
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TReadOnlySelectorOptions<T>): TReadOnlySelectorState<T>;
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TSelectorStateGetter<T>): TReadOnlySelectorState<T>;
+```
+
+## Examples
+
+Coming soon.
