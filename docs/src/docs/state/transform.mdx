@@ -3,4 +3,95 @@ title: transform
 description: Creating a new observable object from another observable object
 ---
 
+## Overview
 
+`transform` allows you to generate one observable from another.
+In some cases it will be necessary to transform the value that is consumed from an observable.
+`transform` allows you to transform the value at query time and at change time.
+
+A transform allow you to provide `get` function for get the value of the original observable and if necessary, `set` function to update the value.
+
+### Definition
+
+```ts
+function transform<T, K>(observable: IObservable<T>, transformAndGetValue: (currValue: T) => K): ITransformedReadOnlyObservable<K>;
+function transform<T, K>(observable: IObservable<T>, transformAndGetValue: (currValue: T) => K, transformAndSetValue: (currValue: K) => T): ITransformedObservable<K>;
+```
+
+### Read only transformed observable
+
+If you don't need to change the values of the original observable via `transform`.
+You can only pass the first function, the `get` function.
+
+```ts
+// This is a read only transformed observable,
+// you cannot able to set new value.
+const transformObservable = transform(
+  someObservable,
+  originalValue => { // Getter function
+    // Do what you want
+    const transformedValue = originalValue
+    return transformedValue
+  }
+)
+```
+
+### Read and write transformed observable
+
+If you don't need to change the values of the original observable via `transform`.
+You can only pass the first function, the `get` function.
+
+```ts
+// In this transformed observable, you can `get` and `set` values.
+const transformObservable = transform(
+  someObservable,
+  originalValue => { // Getter function
+    // Do what you want
+    const transformedValue = originalValue
+    return transformedValue
+  },
+  value => { // Setter function
+    // Do what you want
+    const transformedValue = value
+    return transformedValue
+  }
+)
+```
+
+
+
+## Examples
+
+### Removing spaces from a text
+
+Build original observable
+
+```ts
+const myObservable = observe('My name is Lucas')
+```
+
+Build a transformed observable. Note that in the code below we transform the value at the time that we query and then undo it if a write is done.
+
+```ts
+const myTransformedObservable = transform(
+  myObservable,
+  value => value.replace(/ /g, '\n'),
+  value => value.replace(/\n/g, ' '),
+)
+```
+
+### Count words
+
+Build original observable
+
+```ts
+const myObservable = observe('My name is Lucas')
+```
+
+Build a transformed observable. Note that in the code below we transform the value at the time that we query.
+
+```ts
+const myTransformedObservable = transform(
+  myObservable,
+  value => value.length,
+```

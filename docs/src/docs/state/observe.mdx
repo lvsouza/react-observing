@@ -11,6 +11,12 @@ It lets you build an object that can be used to register listeners for their val
 For the function we just need to input an initial value and it does the rest.
 The object returned by the function can be used in one of our hooks, see more [here](/hooks/use-observer).
 
+### Definition
+
+```ts
+function observe<T>(initialValue: T): IObservable<T>
+```
+
 ## Examples
 
 ### Simple values
