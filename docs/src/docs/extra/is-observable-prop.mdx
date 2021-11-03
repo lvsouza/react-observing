@@ -1,5 +1,51 @@
 ---
 title: isObservableProp
-description: Return if a value is a observable object 
+description: Return if a value is a observable object
 ---
 
+## Overview
+
+Returns `true` if `value` is either an observable object and `false` otherwise.
+
+### Definition
+
+```ts
+function isObservableProp(prop: any): boolean;
+```
+
+## Examples
+
+```ts
+import { observe, transform, selector } from 'react-observing';
+
+const counter = observe(0);
+
+const counterTransformed = transform(
+  counter,
+  value => value * 2,
+  value => value / 2,
+);
+
+const derivedCounter = selector({
+  get: ({ get }) => {
+    const counterValue = get(counter);
+    const counterTransformedValue = get(counterTransformed);
+
+    return counterValue * counterTransformedValue;
+  },
+  set: ({ get, set }, newValue) => {
+    const counterValue = get(counter);
+    const counterTransformedValue = get(counterTransformed);
+
+    set(counter, counterValue / newValue);
+    set(counterTransformed, counterTransformedValue / newValue);
+  },
+});
+
+isObservableProp(counter); // true
+isObservableProp(counterTransformed); // true
+isObservableProp(derivedCounter); // true
+
+isObservableProp(5); // false
+isObservableProp({}); // false
+```

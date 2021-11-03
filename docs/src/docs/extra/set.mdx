@@ -3,3 +3,16 @@ title: set
 description: Set a new value in a observable object
 ---
 
+## Overview
+
+Set a new value to a observable object.
+
+
+## Examples
+
+```ts
+const counter = observe(0)
+...
+set(counter, 1)
+set(counter, oldCounter => oldCounter + 1)
+```
