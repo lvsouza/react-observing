@@ -50,8 +50,8 @@ export function selector<T>(props: TReadOnlySelectorOptions<T>): TReadOnlySelect
 export function selector<T>(props: TSelectorStateGetter<T>): TReadOnlySelectorState<T>;
 
 export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOptions<T> | TReadWriteSelectorOptions<T>): TReadOnlySelectorState<T> | TReadWriteSelectorState<T> {
-  const getResolver: TSelectorStateGetter<T> = typeof props === 'object' ? props.get : props;
-  const setResolver: TSelectorStateSetter<T> = typeof props === 'object' ? (props as any).set : undefined;
+  const setResolver = typeof props === 'object' ? (props as TReadWriteSelectorOptions<T>).set : undefined;
+  const getResolver = typeof props === 'object' ? props.get : props;
 
   /** Store subscriptions to unsubscribe */
   const subscriptions: ISubscription[] = [];
@@ -91,7 +91,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
     },
     set value(newValue: T) {
       if (setResolver) {
-        setResolver({ get: (obs: any) => obs.value, set }, newValue);
+        setResolver({ get: <O>(obs: IObservable<O>) => obs.value, set }, newValue);
       } else {
         throw new Error('Set value is not allowed in read only selector state');
       }
