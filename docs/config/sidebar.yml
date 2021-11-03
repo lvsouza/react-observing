@@ -48,6 +48,8 @@
 
 - label: More
   items:
+    - label: Mandatory properties
+      link: '/more/mandatory-properties'
     - label: Observable pattern
       link: '/more/observable-pattern'
     - label: Road map

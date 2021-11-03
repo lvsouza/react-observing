@@ -34,6 +34,35 @@ const Store = observe([
 
 > To work correctly all properties that are States must be mandatory. [See more](/more/mandatory-properties)
 
+
+## Hooks
+
+Use one of our hooks to listen for any value changes that happen to your observable.
+
+### `useObserver`
+
+Returns a react state and set state from a observable object.
+
+```ts
+const [value, setValue] = useObserver(myObservable)
+```
+
+### `useObserverValue`
+
+Returns a react state from a observable object.
+
+```ts
+const value = useObserverValue(myObservable)
+```
+
+### `useSetObserver`
+
+Returns a react set state from a observable object.
+
+```ts
+const setValue = useSetObserver(myObservable)
+```
+
 ## Each property as state
 
 You can have properties that are states and properties that are not states.

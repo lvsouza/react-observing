@@ -3,4 +3,51 @@ title: Mandatory properties
 description: We use mandatory properties because a `useObserver` cannot listen for state changes on a property that can be `undefined`.
 ---
 
-We use mandatory properties because a `useObserver` cannot listen for state changes on a property that can be `undefined`
+## Overview
+
+We use mandatory properties because a `useObserver` cannot listen for state changes on a property that can be `undefined`.
+
+For `useObserver` to work correctly, the object passed as a parameter must have an `id`, a `subscribe` method, and a `value` property.
+These attributes are for `useObserver` to be able to subscribe to value changes.
+
+## Properties in a `observable`
+
+> If you want the hooks to work correctly, you will need to provide an object that has the properties below.
+
+```ts lineNumbers
+
+const observableValue = observe('')
+
+// This observableValue has this props
+
+{
+  // The identifier of the state, this id is auto generated
+  id: '..uuid...',
+  // The value stored,
+  value: '',
+  // A function that allows you to add listeners on value changes.
+  subscribe: (call...) => ...,
+}
+
+```
+
+## How to manage state without `undefined` properties?
+
+You can actually have `undefined` properties. The value that is within the observable can be of any possible type. See the example:
+
+If you are using **typescript**, just follow the examples below.
+If it's in **javascript**, you don't need to pass the typing, at any time assign the value you want.
+
+```ts
+// string or undefined
+const myObservableValue = observe<string | undefined>('')
+const myObservableValue = observe<string | undefined>(undefined)
+
+// number or undefined
+const myObservableValue = observe<number | undefined>(0)
+const myObservableValue = observe<number | undefined>(undefined)
+
+// any
+const myObservableValue = observe<any>(0)
+const myObservableValue = observe<any>(undefined)
+```
