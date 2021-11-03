@@ -1,0 +1,52 @@
+---
+title: Manual subscription
+description: Use a manual subscription if you have a very advanced case.
+---
+
+> We recommend our hooks for most use cases, [see here](/hooks/use-observer).
+
+## Overview
+
+The `react-observing` allows you to manually subscribe to value changes of an observable object.
+
+In some very complex cases, normal hooks may not be enough.
+To work around the problem you can use the `subscribe` method available on any observable object.
+
+### Definition
+
+```ts highlight={4}
+interface IObservable<T> {
+  id: string;
+  value: T;
+  subscribe(callback: (val: T) => void): ISubscription;
+}
+```
+
+## Examples
+
+### Counter
+
+In any react component you can use the `subscribe` of an observable.
+
+```tsx lineNumbers
+import { useState, useEffect } from 'react'
+import { observe, set } from 'react-observing'
+
+const counterObservable = observe(0)
+
+const App = () => {
+  const [counter, setCounter] = useState(0)
+
+  useEffect(() => {
+    const subscription = counterObservable.subscribe(receivedValue => setCounter(receivedValue))
+
+    return subscription.unsubscribe()
+  })
+
+  return (
+    <button onClick={() => set(counter + 1)}>
+      Add +1 in {counter}
+    </button>
+  )
+}
+```
