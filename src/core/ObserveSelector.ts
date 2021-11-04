@@ -72,7 +72,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
      */
     const subscription = currObservable.subscribe(() => {
       const value = getResolver({ get: getAndSubscribe });
-      setTimeout(() => storedObservable.value = value, 0);
+      storedObservable.value = value;
     });
 
     /** Store subscription */
@@ -85,7 +85,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
   }
 
   return {
-    ...storedObservable,
+    id: storedObservable.id,
     get value() {
       return storedObservable.value;
     },

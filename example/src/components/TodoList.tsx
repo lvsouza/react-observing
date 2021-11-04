@@ -11,7 +11,8 @@ const todosWordLengthStore = selector({
   get: ({ get }) => {
     const items = get(todosStore);
 
-    const length = items.reduce((count, todo) => count + get(todo).length, 0);
+    let length = 0;
+    items.forEach((todo) => length += get(todo).length);
 
     return length;
   }
@@ -33,6 +34,8 @@ const TodoItem: React.FC<{ todoObservable: IObservable<string> }> = ({ todoObser
   const [todo, setTodo] = useObserver(todoObservable);
 
   return <li>
+    <ItemsCount />
+    <WordCount />
     <input value={todo} onChange={e => setTodo(e.target.value)} />
   </li>
 }

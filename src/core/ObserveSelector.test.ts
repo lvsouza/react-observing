@@ -54,6 +54,34 @@ describe('New readonly selector', () => {
   });
 });
 
+describe('New readonly selector with arrays', () => {
+  const Store = observe([
+    observe('1'),
+    observe('2'),
+    observe('3'),
+    observe('4'),
+  ]);
+
+  const storeSelector = selector({
+    get: ({ get }) => {
+      const items = get(Store);
+
+      const wordCount = items.reduce((count, item) => count + get(item).length, 0);
+
+      return `Word total: ${wordCount}`;
+    }
+  });
+
+  it('is "Word total: 4"', () => {
+    expect(storeSelector.value).toBe('Word total: 4');
+  });
+
+  it('is "Word total: 5" in subscribe', () => {
+    storeSelector.subscribe(value => expect(value).toBe('Word total: 5'));
+    Store.value = [...Store.value, observe('5')];
+  });
+});
+
 describe('New readwrite selector', () => {
   const Store1 = observe(true);
   const Store2 = observe(true);
