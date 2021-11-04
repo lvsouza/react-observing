@@ -1,5 +1,6 @@
-import { IObservable, ISubscription } from '../interfaces';
-import { observe } from './Observable';
+import { v4 as uuid } from 'uuid';
+
+import { IObservable, ISubscription, IListeners } from '../interfaces';
 import { set } from './Set';
 
 /** Subscribe in the observable and return their current state */
@@ -53,11 +54,15 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
   const setResolver = typeof props === 'object' ? (props as TReadWriteSelectorOptions<T>).set : undefined;
   const getResolver = typeof props === 'object' ? props.get : props;
 
+  const storedListeners: IListeners<T>[] = [];
+  const selectorId = uuid();
+
   /** Store subscriptions to unsubscribe */
   const subscriptions: ISubscription[] = [];
 
-  /** Store the calculated value */
-  const storedObservable: IObservable<T> = observe<T>(getResolver({ get: getAndSubscribe }));
+  function getOnly<O>(currObservable: IObservable<O>): O {
+    return currObservable.value;
+  }
 
   function getAndSubscribe<O>(currObservable: IObservable<O>): O {
     /**
@@ -72,7 +77,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
      */
     const subscription = currObservable.subscribe(() => {
       const value = getResolver({ get: getAndSubscribe });
-      storedObservable.value = value;
+      storedListeners.forEach((listener) => listener.emit(value));
     });
 
     /** Store subscription */
@@ -84,10 +89,41 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
     return currObservable.value;
   }
 
+  /**
+   * Creates the subscription for the value
+   *
+   * @param fn Function performed when the value changes
+   */
+  const subscribe = (fn: (val: T) => void): ISubscription => {
+    const newListener = { id: uuid(), emit: fn };
+    storedListeners.push(newListener);
+
+    if (storedListeners.length === 1) {
+      getResolver({ get: getAndSubscribe });
+    }
+
+    return {
+      id: newListener.id,
+      observerId: selectorId,
+      unsubscribe: () => {
+        const indexToRemove = storedListeners.findIndex(listener => listener.id === newListener.id);
+        if (indexToRemove >= 0) {
+          storedListeners.splice(indexToRemove, 1);
+        }
+
+        if (storedListeners.length === 0) {
+          subscriptions.forEach(subs => subs.unsubscribe());
+          subscriptions.splice(0);
+        }
+      }
+    };
+  };
+
   return {
-    id: storedObservable.id,
+    subscribe,
+    id: selectorId,
     get value() {
-      return storedObservable.value;
+      return getResolver({ get: getOnly });
     },
     set value(newValue: T) {
       if (setResolver) {
@@ -96,15 +132,5 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
         throw new Error('Set value is not allowed in read only selector state');
       }
     },
-    subscribe: (callback: (val: T) => void) => {
-      const subscription = storedObservable.subscribe(callback);
-      return {
-        ...subscription,
-        unsubscribe: () => {
-          subscriptions.forEach(sub => sub.unsubscribe());
-          subscription.unsubscribe();
-        }
-      };
-    }
   };
 }
