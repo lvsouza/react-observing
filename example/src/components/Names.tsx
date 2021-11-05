@@ -11,7 +11,7 @@ const namesWordLengthStore = selectorWithParams_UNSTABLE<number, number>({
   get: (multiplier = 1) => ({ get }) => {
     const items = get(namesStore);
 
-    const length = items.reduce((count, name, i) => count += get(name).length, 0);
+    const length = items.reduce((count, name) => count += get(name).length, 0);
 
     return length * multiplier;
   }
@@ -24,9 +24,9 @@ const ItemsCount = () => {
   return <p>(transform) Items count: {namesLength}</p>
 }
 
-const WordCount: React.FC<{ index: number }> = ({ index }) => {
-  const namesWordLength = useObserverValue(namesWordLengthStore(index)(index.toString()));
-  return <p>(selector) Words count in all items: {namesWordLength}</p>
+const WordCount: React.FC<{ index?: number }> = ({ index }) => {
+  const namesWordLength = useObserverValue(namesWordLengthStore(index || 1)((index || 'trying').toString()));
+  return <p>(selector with params) Words count in all items: {namesWordLength}</p>
 }
 
 const NameItem: React.FC<{ nameObservable: IObservable<string>, index: number }> = ({ nameObservable, index }) => {
@@ -45,14 +45,14 @@ export const NameList = () => {
 
   return (
     <div>
-      <h3>Names</h3>
+      <h1>Names</h1>
       <ItemsCount />
-      <WordCount index={1} />
+      <WordCount />
 
       <button onClick={() => setNames([...names, observe('')])}>Add item</button>
 
       <ul>
-        {names.map((name, index) => <NameItem key={index} index={index + 2} nameObservable={name} />)}
+        {names.map((name, index) => <NameItem key={name.id} index={index + 2} nameObservable={name} />)}
       </ul>
     </div>
   )

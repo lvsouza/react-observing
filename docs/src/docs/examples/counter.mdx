@@ -8,10 +8,10 @@ Here is an example of how to use react observing to build a simple counter.
 ```ts lineNumbers
 import { observe, useObserver } from 'react-observing'
 
-const counterObservable = observe(0)
+const counterStore = observe(0)
 
 const App = () => {
-  const [counter, setCounter] = useObserver(counterObservable)
+  const [counter, setCounter] = useObserver(counterStore)
 
   return (
     <button onClick={() => setCounter(counter + 1)}>

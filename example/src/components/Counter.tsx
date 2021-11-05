@@ -25,6 +25,7 @@ const GetSetCounter = () => {
 export const Counter = () => {
   return (
     <div>
+      <h1>Counter</h1>
       <SetCounter />
       <GetSetCounter />
     </div>

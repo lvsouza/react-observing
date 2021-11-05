@@ -1,0 +1,31 @@
+---
+title: Word counter
+description: How to create a word counter with react observing.
+---
+
+Here is an example of how to use react observing to build a simple word counter.
+
+```ts lineNumbers
+import { observe, transform, useObserver, useObserverValue } from 'react-observing'
+
+const textStore = observe('')
+
+const textSizeStore = transform(textStore, text => text.length)
+
+const Counter = () => {
+  const textSize = useObserverValue(textSizeStore)
+
+  return <p>Length {textSize}</p>
+}
+
+export const WordCounter = () => {
+  const [text, setText] = useObserver(textStore)
+
+  return (
+    <>
+      <Counter />
+      <input value={text} onChange={e => setText(e.target.value)} />
+    </>
+  )
+}
+```

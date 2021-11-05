@@ -45,6 +45,8 @@
   items:
     - label: 'Counter'
       link: '/examples/counter'
+    - label: 'Word counter'
+      link: '/examples/word-counter'
 
 - label: More
   items:

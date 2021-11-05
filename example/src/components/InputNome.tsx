@@ -16,6 +16,7 @@ export const InputName = () => {
 
   return (
     <div>
+      <h1>Input name</h1>
       <p>Original: {name}</p>
       <p>Transformed: {transformedName}</p>
       <input value={name} onChange={e => setName(e.target.value)} />

@@ -79,7 +79,6 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
      * If you is not subscribed, then subscribe
      */
     const subscription = currObservable.subscribe(() => {
-
       const newSubscriptions: ISubscription[] = [];
 
       const value = getResolver({ get: getAndSubscribe(newSubscriptions) });
@@ -110,7 +109,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
     const newListener = { id: uuid(), emit: fn };
     storedListeners.push(newListener);
 
-    if (storedListeners.length === 1) {
+    if (observablesSubscribed.length === 0 && storedListeners.length > 0) {
       getResolver({ get: getAndSubscribe(observablesSubscribed) });
     }
 

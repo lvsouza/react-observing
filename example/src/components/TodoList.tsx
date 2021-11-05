@@ -1,7 +1,7 @@
 import { IObservable, observe, selector, transform, useObserver, useObserverValue } from 'react-observing'
 
 
-const todosStore = observe([
+const todosStore: IObservable<IObservable<string>[]> = observe([
   observe(''),
 ]);
 
@@ -29,14 +29,17 @@ const WordCount = () => {
   return <p>(selector) Words count in all items: {todosWordLength}</p>
 }
 
-const TodoItem: React.FC<{ todoObservable: IObservable<string>, onRemove: () => void }> = ({ todoObservable, onRemove }) => {
+const Input: React.FC<{ todoObservable: IObservable<string> }> = ({ todoObservable }) => {
   const [todo, setTodo] = useObserver(todoObservable);
+  return <input value={todo} onChange={e => setTodo(e.target.value)} />
+}
 
+const TodoItem: React.FC<{ todoObservable: IObservable<string>, onRemove: () => void }> = ({ todoObservable, onRemove }) => {
   return <li>
-    <ItemsCount />
-    <WordCount />
+    {/* <ItemsCount />
+    <WordCount /> */}
     <button onClick={onRemove}>Remove</button>
-    <input value={todo} onChange={e => setTodo(e.target.value)} />
+    <Input todoObservable={todoObservable} />
   </li>
 }
 
@@ -46,17 +49,19 @@ export const TodoList = () => {
 
   return (
     <div>
+      <h1>Todo list</h1>
+
       <ItemsCount />
       <WordCount />
 
-      <button onClick={() => setTodos([...todos, observe('')])}>Add item</button>
+      <button onClick={() => setTodos(old => [...old, observe('')])}>Add item</button>
 
       <ul>
         {todos.map((todo, index) => (
           <TodoItem
             key={todo.id}
             todoObservable={todo}
-            onRemove={() => setTodos([...todos.filter((_, i) => i !== index)])}
+            onRemove={() => setTodos(old => [...old.filter((_, i) => i !== index)])}
           />
         ))}
       </ul>
