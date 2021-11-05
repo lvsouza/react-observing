@@ -30,12 +30,13 @@ const WordCount = () => {
   return <p>(selector) Words count in all items: {todosWordLength}</p>
 }
 
-const TodoItem: React.FC<{ todoObservable: IObservable<string> }> = ({ todoObservable }) => {
+const TodoItem: React.FC<{ todoObservable: IObservable<string>, onRemove: () => void }> = ({ todoObservable, onRemove }) => {
   const [todo, setTodo] = useObserver(todoObservable);
 
   return <li>
     <ItemsCount />
     <WordCount />
+    <button onClick={onRemove}>Remove</button>
     <input value={todo} onChange={e => setTodo(e.target.value)} />
   </li>
 }
@@ -52,7 +53,13 @@ export const TodoList = () => {
       <button onClick={() => setTodos([...todos, observe('')])}>Add item</button>
 
       <ul>
-        {todos.map((todo, index) => <TodoItem key={index} todoObservable={todo} />)}
+        {todos.map((todo, index) => (
+          <TodoItem
+            key={todo.id}
+            todoObservable={todo}
+            onRemove={() => setTodos([...todos.filter((_, i) => i !== index)])}
+          />
+        ))}
       </ul>
     </div>
   )

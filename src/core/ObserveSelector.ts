@@ -58,17 +58,20 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
   const selectorId = uuid();
 
   /** Store subscriptions to unsubscribe */
-  const subscriptions: ISubscription[] = [];
+  const observablesSubscribed: ISubscription[] = [];
 
-  function getOnly<O>(currObservable: IObservable<O>): O {
+  const getOnly = <O>(currObservable: IObservable<O>): O => {
     return currObservable.value;
   }
 
-  function getAndSubscribe<O>(currObservable: IObservable<O>): O {
+  const getAndSubscribe = (listToAddNewSubscriptions: ISubscription[]) => <O>(currObservable: IObservable<O>): O => {
     /**
      * If you already is subscribed just return the value
      */
-    if (subscriptions.some(sub => sub.observerId === currObservable.id)) {
+    const subscriptionPosition = observablesSubscribed.findIndex(sub => sub.observerId === currObservable.id)
+    const oldSubscription = observablesSubscribed.splice(subscriptionPosition, 1);
+    if (oldSubscription.length > 0) {
+      listToAddNewSubscriptions.push(...oldSubscription);
       return currObservable.value;
     }
 
@@ -76,12 +79,21 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
      * If you is not subscribed, then subscribe
      */
     const subscription = currObservable.subscribe(() => {
-      const value = getResolver({ get: getAndSubscribe });
+
+      const newSubscriptions: ISubscription[] = [];
+
+      const value = getResolver({ get: getAndSubscribe(newSubscriptions) });
+
+      // This logic help to remove unused subscriptions
+      observablesSubscribed.forEach(subs => subs.unsubscribe());
+      observablesSubscribed.splice(0);
+      observablesSubscribed.push(...newSubscriptions);
+
       storedListeners.forEach((listener) => listener.emit(value));
     });
 
     /** Store subscription */
-    subscriptions.push(subscription);
+    listToAddNewSubscriptions.push(subscription);
 
     /**
      * Return the value
@@ -99,7 +111,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
     storedListeners.push(newListener);
 
     if (storedListeners.length === 1) {
-      getResolver({ get: getAndSubscribe });
+      getResolver({ get: getAndSubscribe(observablesSubscribed) });
     }
 
     return {
@@ -112,8 +124,8 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
         }
 
         if (storedListeners.length === 0) {
-          subscriptions.forEach(subs => subs.unsubscribe());
-          subscriptions.splice(0);
+          observablesSubscribed.forEach(subs => subs.unsubscribe());
+          observablesSubscribed.splice(0);
         }
       }
     };
