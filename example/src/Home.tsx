@@ -1,6 +1,7 @@
 import { InputName } from './components/InputNome';
 import { TodoList } from './components/TodoList';
 import { Counter } from './components/Counter';
+import { NameList } from './components/Names';
 
 
 export const Home = () => {
@@ -12,6 +13,8 @@ export const Home = () => {
       <Counter />
       <hr />
       <InputName />
+      <hr />
+      <NameList />
       <hr />
       <TodoList />
       <hr />

@@ -127,7 +127,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
     },
     set value(newValue: T) {
       if (setResolver) {
-        setResolver({ get: <O>(obs: IObservable<O>) => obs.value, set }, newValue);
+        setResolver({ get: getOnly, set }, newValue);
       } else {
         throw new Error('Set value is not allowed in read only selector state');
       }

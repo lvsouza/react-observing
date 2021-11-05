@@ -34,8 +34,8 @@ type TReadWriteSelectorOptionsWithParams<T, P extends TSerializableParam> = TRea
   set: TSelectorStateSetterWithParams<T, P>;
 }
 
-type TReadOnlySelectorStateWithParams<T, P extends TSerializableParam> = (id: string, param: P) => IObservable<T>;
-type TReadWriteSelectorStateWithParams<T, P extends TSerializableParam> = (id: string, param: P) => IObservable<T>;
+type TReadOnlySelectorStateWithParams<T, P extends TSerializableParam> = (param: P) => (id: string) => IObservable<T>;
+type TReadWriteSelectorStateWithParams<T, P extends TSerializableParam> = (param: P) => (id: string) => IObservable<T>;
 
 
 export function selectorWithParams_UNSTABLE<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P>): TReadWriteSelectorStateWithParams<T, P>;
@@ -47,7 +47,7 @@ export function selectorWithParams_UNSTABLE<T, P extends TSerializableParam>(opt
 
   const observableSelectors: { [key: string]: IObservable<any> } = {};
 
-  return (id: string, param: P) => {
+  return (param: P) => (id: string) => {
     if (observableSelectors[id]) return observableSelectors[id];
 
     if (setResolver === undefined) {

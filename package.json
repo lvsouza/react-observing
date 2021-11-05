@@ -1,13 +1,13 @@
 {
   "name": "react-observing",
-  "version": "2.4.9",
+  "version": "2.4.10",
   "description": "Allow you observe objects and class in react js.",
   "license": "MIT",
   "author": "lvsouza",
   "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
-  "repository": "lvsouza/react-observing",
+  "repository": "git://github.com/lvsouza/react-observing.git",
   "engines": {
     "node": ">=14"
   },

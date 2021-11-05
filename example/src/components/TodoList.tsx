@@ -52,7 +52,7 @@ export const TodoList = () => {
       <button onClick={() => setTodos([...todos, observe('')])}>Add item</button>
 
       <ul>
-        {todos.map(todo => <TodoItem todoObservable={todo} />)}
+        {todos.map((todo, index) => <TodoItem key={index} todoObservable={todo} />)}
       </ul>
     </div>
   )
