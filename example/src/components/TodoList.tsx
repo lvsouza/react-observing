@@ -11,8 +11,7 @@ const todosWordLengthStore = selector({
   get: ({ get }) => {
     const items = get(todosStore);
 
-    let length = 0;
-    items.forEach((todo) => length += get(todo).length);
+    const length = items.reduce((count, todo) => count += get(todo).length, 0);
 
     return length;
   }
