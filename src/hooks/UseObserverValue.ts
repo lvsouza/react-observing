@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef } from 'react';
 
-import { IObservable } from './../interfaces';
+import { IObservable } from './../interfaces/IObservable';
 
 /**
  * Allows you to subscribe to changes in observable variables

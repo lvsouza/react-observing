@@ -1,6 +1,8 @@
 import { v4 as uuid } from 'uuid';
 
-import { IListeners, IObservable, ISubscription } from './../interfaces';
+import { ISubscription } from './../interfaces/ISubscription';
+import { IObservable } from './../interfaces/IObservable';
+import { IListeners } from './../interfaces/IListeners';
 
 /**
  * Allows us to subscribe to changes to a value

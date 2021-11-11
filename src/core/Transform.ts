@@ -1,6 +1,8 @@
 import { v4 as uuid } from 'uuid';
 
-import { IObservable, ISubscription, ITransformedObservable, ITransformedReadOnlyObservable } from './../interfaces';
+import { ITransformedObservable, ITransformedReadOnlyObservable } from './../interfaces/ITransformedObservable';
+import { ISubscription } from './../interfaces/ISubscription';
+import { IObservable } from './../interfaces/IObservable';
 
 /**
  * Allows us to subscribe to other observable changes

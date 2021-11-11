@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 
-import { TSetObservableState, TUpdater, TValueOrUpdater } from '../types';
-import { IObservable } from './../interfaces';
+import { TUpdater, TValueOrUpdater } from '../types/TValueOrUpdater';
+import { TSetObservableState } from '../types/TSetObservableState';
+import { IObservable } from './../interfaces/IObservable';
 
 /**
  * Allows you to subscribe to changes in observable variables

@@ -1,6 +1,8 @@
 import { v4 as uuid } from 'uuid';
 
-import { IObservable, ISubscription, IListeners } from '../interfaces';
+import { ISubscription } from '../interfaces/ISubscription';
+import { IObservable } from '../interfaces/IObservable';
+import { IListeners } from '../interfaces/IListeners';
 import { set } from './Set';
 
 /** Subscribe in the observable and return their current state */

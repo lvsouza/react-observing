@@ -1,6 +1,6 @@
-import { TSerializableParam } from '../types';
+import { TSerializableParam } from '../types/TSerializableParam';
+import { IObservable } from '../interfaces/IObservable';
 import { selector } from './ObserveSelector';
-import { IObservable } from '../interfaces';
 
 
 /** Subscribe in the observable and return their current state */

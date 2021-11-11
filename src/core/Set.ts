@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import { IObservable } from '../interfaces';
-import { TUpdater, TValueOrUpdater } from '../types';
+import { TUpdater, TValueOrUpdater } from '../types/TValueOrUpdater';
+import { IObservable } from '../interfaces/IObservable';
 
 /**
  * Allows you to assign values to observables
