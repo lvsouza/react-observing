@@ -1,6 +1,6 @@
 {
   "name": "react-observing",
-  "version": "2.4.12",
+  "version": "2.4.13",
   "description": "Allow you observe objects and class in react js.",
   "license": "MIT",
   "author": "lvsouza",
@@ -46,11 +46,16 @@
     "reactjs",
     "state",
     "recoil",
+    "recoiljs",
     "observers",
     "typescript",
     "listeners",
     "listen",
     "observe",
-    "observing"
+    "observing",
+    "rxjs",
+    "react rxjs",
+    "react subscribe",
+    "react observing"
   ]
 }
