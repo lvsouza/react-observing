@@ -10,7 +10,7 @@ import { IObservable } from './../interfaces/IObservable';
 export function useObserverValue<T>(observable: IObservable<T>): T {
   const [, forceUpdate] = useReducer(() => [], []);
 
-  const stateId = useRef<string>();
+  const stateId = useRef<string>(observable.id);
 
   useEffect(() => {
     if (stateId.current !== observable.id) {
@@ -21,7 +21,7 @@ export function useObserverValue<T>(observable: IObservable<T>): T {
     const subscription = observable.subscribe(() => forceUpdate());
 
     return subscription.unsubscribe;
-  }, [observable]);
+  }, [observable.id]);
 
   return observable.value;
 }

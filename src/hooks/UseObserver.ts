@@ -13,7 +13,18 @@ import { IObservable } from './../interfaces/IObservable';
 export function useObserver<T>(observable: IObservable<T>): [T, TSetObservableState<T>] {
   const [, forceUpdate] = useReducer(() => [], []);
 
-  const stateId = useRef<string>();
+  const stateId = useRef<string>(observable.id);
+
+  useEffect(() => {
+    if (stateId.current !== observable.id) {
+      stateId.current = observable.id;
+      forceUpdate();
+    }
+
+    const subscription = observable.subscribe(() => forceUpdate());
+
+    return subscription.unsubscribe;
+  }, [observable.id]);
 
   /**
    * Change the value
@@ -29,17 +40,6 @@ export function useObserver<T>(observable: IObservable<T>): [T, TSetObservableSt
       observable.value = valOrUpdater;
     }
   }, [observable.value]);
-
-  useEffect(() => {
-    if (stateId.current !== observable.id) {
-      stateId.current = observable.id;
-      forceUpdate();
-    }
-
-    const subscription = observable.subscribe(() => forceUpdate());
-
-    return subscription.unsubscribe;
-  }, [observable]);
 
   return [observable.value, handleSetValue];
 }

@@ -67,12 +67,10 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
   }
 
   const getAndSubscribe = (listToAddNewSubscriptions: ISubscription[]) => <O>(currObservable: IObservable<O>): O => {
-    /**
-     * If you already is subscribed just return the value
-     */
+
     const subscriptionPosition = observablesSubscribed.findIndex(sub => sub.observerId === currObservable.id)
     const oldSubscription = observablesSubscribed.splice(subscriptionPosition, 1);
-    if (oldSubscription.length > 0) {
+    if (subscriptionPosition > -1 && oldSubscription.length > 0) {
       listToAddNewSubscriptions.push(...oldSubscription);
       return currObservable.value;
     }
@@ -111,7 +109,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
     const newListener = { id: uuid(), emit: fn };
     storedListeners.push(newListener);
 
-    if (observablesSubscribed.length === 0 && storedListeners.length > 0) {
+    if (observablesSubscribed.length === 0) {
       getResolver({ get: getAndSubscribe(observablesSubscribed) });
     }
 
