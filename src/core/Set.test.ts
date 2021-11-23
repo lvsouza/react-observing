@@ -1,4 +1,4 @@
-import { observe } from './Observable';
+import { observe } from './Observe';
 import { set } from './Set';
 
 describe('Set observable prop', () => {

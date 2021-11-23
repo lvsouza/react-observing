@@ -1,5 +1,5 @@
 import { isObservableProp } from './IsObservableProp';
-import { observe } from './Observable';
+import { observe } from './Observe';
 
 describe('Is a observable prop', () => {
   const Store = observe(true);
