@@ -66,3 +66,5 @@
       link: '/more/roadmap'
     - label: 'Github'
       link: 'https://github.com/lvsouza/react-observing'
+    - label: 'Npm'
+      link: 'https://www.npmjs.com/package/react-observing/v/latest'
