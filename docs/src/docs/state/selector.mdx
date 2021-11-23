@@ -3,8 +3,6 @@ title: selector
 description: Creating a new observable object from other observable objects or list of observable objects
 ---
 
-> The `selector` is in **preview** right now. **NOT** recommended for production.
-
 ## Overview
 
 A selector represents a piece of derived state.
@@ -34,62 +32,36 @@ export function selector<T>(props: TReadOnlySelectorOptions<T>): TReadOnlySelect
  * Build a read only selector state
  */
 export function selector<T>(props: TSelectorStateGetter<T>): TReadOnlySelectorState<T>;
+/**
+ * Build a read and writable selector state
+ */
+export function selector<T>(props: TReadWriteSelectorOptions<T>, dangerousOnUnused?: () => void): TReadWriteSelectorState<T>;
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TReadOnlySelectorOptions<T>, dangerousOnUnused?: () => void): TReadOnlySelectorState<T>;
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TSelectorStateGetter<T>, dangerousOnUnused?: () => void): TReadOnlySelectorState<T>;
 ```
 
 ## Examples
 
-### Simple todo list
+### Read only selector
 
-```tsx lineNumbers highlight={5-13,16}
-const todosStore = observe([
-  observe(''),
-]);
+```tsx lineNumbers
+const mySelector = selector({
+  get: ({get}) => get(myObservable) * 100,
+});
+```
 
-const todosWordLengthStore = selector({
-  get: ({ get }) => {
-    const items = get(todosStore);
+### Writeable selector
 
-    const length = items.reduce((count, todo) => count += get(todo).length, 0);
-
-    return length;
-  }
+```tsx lineNumbers
+const writableSelector = selector({
+  get: ({get}) => ({...get(myObservable), extraField: 'hi'}),
+  set: ({set}, newValue) => set(myObservable, newValue),
 });
 
-const WordCount = () => {
-  const todosWordLength = useObserverValue(todosWordLengthStore);
-  return <p>(selector) Words count in all items: {todosWordLength}</p>
-}
-
-const TodoItem: React.FC<{ todoObservable: IObservable<string>, onRemove: () => void }> = ({ todoObservable, onRemove }) => {
-  const [todo, setTodo] = useObserver(todoObservable);
-
-  return <li>
-    <WordCount />
-    <button onClick={onRemove}>Remove</button>
-    <input value={todo} onChange={e => setTodo(e.target.value)} />
-  </li>
-}
-
-
-export const TodoList = () => {
-  const [todos, setTodos] = useObserver(todosStore);
-
-  return (
-    <div>
-      <WordCount />
-
-      <button onClick={() => setTodos([...todos, observe('')])}>Add item</button>
-
-      <ul>
-        {todos.map((todo, index) => (
-          <TodoItem
-            key={todo.id}
-            todoObservable={todo}
-            onRemove={() => setTodos([...todos.filter((_, i) => i !== index)])}
-          />
-        ))}
-      </ul>
-    </div>
-  )
-}
 ```

@@ -13,8 +13,10 @@
       link: '/state/observe'
     - label: 'transform'
       link: '/state/transform'
-    - label: 'selector (preview)'
+    - label: 'selector'
       link: '/state/selector'
+    - label: 'advancedSelector (preview)'
+      link: '/state/advanced-selector'
 
 - label: 'hooks'
   items:

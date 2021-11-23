@@ -1,0 +1,54 @@
+---
+title: advancedSelector
+description: Creating a new observable object from other observable objects or list of observable objects
+---
+
+> The `advancedSelector` is in **preview** right now. **NOT** recommended for production.
+
+## Overview
+
+Returns a function that returns a read-only IObservable or writeable IObservable.
+
+A `advancedSelector` is a powerful pattern that is similar to a [selector](/state/selector), but allows you to pass parameters to the `get` and `set` callbacks of a selector.
+The `advancedSelector()` utility returns a function which can be called with user-defined parameters and returns a `selector`.
+Each unique parameter value will return the same memoized selector instance.
+
+### Definition
+
+```ts
+/**
+ * Build a read only advanced selector state
+ */
+export function advancedSelector<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P>): TReadWriteSelectorStateWithParams<T, P>;
+/**
+ * Build a read and writable advanced selector state
+ */
+export function advancedSelector<T, P extends TSerializableParam>(options: TReadOnlySelectorOptionsWithParams<T, P>): TReadOnlySelectorStateWithParams<T, P>;
+```
+
+## Example
+
+```tsx lineNumbers highlight={4-12,19}
+const myNumberObservable = observe(2);
+
+const myMultipliedObservable = advancedSelector({
+  get: (multiplier) => ({get}) => {
+    return get(myNumberObservable) * multiplier;
+  },
+
+  // optional set
+  set: (multiplier) => ({set}, newValue) => {
+    set(myNumberObservable, newValue / multiplier);
+  },
+});
+
+function MyComponent() {
+  // defaults to 2
+  const number = useObserverValue(myNumberObservable);
+
+  // defaults to 200
+  const multipliedNumber = useObserverValue(myMultipliedObservable(100));
+
+  return <div>...</div>;
+}
+```

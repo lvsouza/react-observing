@@ -39,8 +39,16 @@ type TReadOnlySelectorStateWithParams<T, P extends TSerializableParam> = (param:
 type TReadWriteSelectorStateWithParams<T, P extends TSerializableParam> = (param: P) => IObservable<T>;
 
 
+
+/**
+ * Build a read only advanced selector state
+ */
 export function advancedSelector<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P>): TReadWriteSelectorStateWithParams<T, P>;
+/**
+ * Build a read and writable advanced selector state
+ */
 export function advancedSelector<T, P extends TSerializableParam>(options: TReadOnlySelectorOptionsWithParams<T, P>): TReadOnlySelectorStateWithParams<T, P>;
+
 export function advancedSelector<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P> | TReadOnlySelectorOptionsWithParams<T, P>): TReadOnlySelectorStateWithParams<T, P> | TReadWriteSelectorStateWithParams<T, P> {
   const getResolver: (param: P) => TSelectorStateGetter<T> = typeof options === 'object' ? options.get : options;
   const setResolver: ((param: P) => TSelectorStateSetter<T>) | undefined = typeof options === 'object' ? (options as any).set : undefined;
