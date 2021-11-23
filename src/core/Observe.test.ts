@@ -1,4 +1,4 @@
-import { observe } from './Observable';
+import { observe } from './Observe';
 
 describe('New store', () => {
   const Store = observe(true);

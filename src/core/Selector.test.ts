@@ -1,5 +1,5 @@
-import { selector } from './ObserveSelector';
-import { observe } from './Observable';
+import { selector } from './Selector';
+import { observe } from './Observe';
 import { set } from './Set';
 
 describe('New readonly selector with arrow function', () => {

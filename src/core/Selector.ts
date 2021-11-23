@@ -51,8 +51,20 @@ export function selector<T>(props: TReadOnlySelectorOptions<T>): TReadOnlySelect
  * Build a read only selector state
  */
 export function selector<T>(props: TSelectorStateGetter<T>): TReadOnlySelectorState<T>;
+/**
+ * Build a read and writable selector state
+ */
+export function selector<T>(props: TReadWriteSelectorOptions<T>, dangerousOnUnused?: () => void): TReadWriteSelectorState<T>;
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TReadOnlySelectorOptions<T>, dangerousOnUnused?: () => void): TReadOnlySelectorState<T>;
+/**
+ * Build a read only selector state
+ */
+export function selector<T>(props: TSelectorStateGetter<T>, dangerousOnUnused?: () => void): TReadOnlySelectorState<T>;
 
-export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOptions<T> | TReadWriteSelectorOptions<T>): TReadOnlySelectorState<T> | TReadWriteSelectorState<T> {
+export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOptions<T> | TReadWriteSelectorOptions<T>, dangerousOnUnused?: () => void): TReadOnlySelectorState<T> | TReadWriteSelectorState<T> {
   const setResolver = typeof props === 'object' ? (props as TReadWriteSelectorOptions<T>).set : undefined;
   const getResolver = typeof props === 'object' ? props.get : props;
 
@@ -125,6 +137,11 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
         if (storedListeners.length === 0) {
           observablesSubscribed.forEach(subs => subs.unsubscribe());
           observablesSubscribed.splice(0);
+          setTimeout(() => {
+            if (storedListeners.length === 0) {
+              dangerousOnUnused?.();
+            }
+          }, 0);
         }
       }
     };

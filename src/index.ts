@@ -2,12 +2,12 @@ export type { ITransformedObservable, ITransformedReadOnlyObservable } from './i
 export type { ISubscription } from './interfaces/ISubscription';
 export type { IObservable } from './interfaces/IObservable';
 export type { IListeners } from './interfaces/IListeners';
-export { selectorWithParams_UNSTABLE } from './core/ObserveSelectorWithParams';
 export { useObserverValue } from './hooks/UseObserverValue';
+export { advancedSelector } from './core/AdvancedSelector';
 export { isObservableProp } from './core/IsObservableProp';
 export { useSetObserver } from './hooks/UseSetObserver';
 export { useObserver } from './hooks/UseObserver';
-export { selector } from './core/ObserveSelector';
 export { transform } from './core/Transform';
-export { observe } from './core/Observable';
+export { selector } from './core/Selector';
+export { observe } from './core/Observe';
 export { set } from './core/Set';

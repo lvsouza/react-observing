@@ -1,6 +1,6 @@
 import { TSerializableParam } from '../types/TSerializableParam';
 import { IObservable } from '../interfaces/IObservable';
-import { selector } from './ObserveSelector';
+import { selector } from './Selector';
 
 
 /** Subscribe in the observable and return their current state */
@@ -34,33 +34,44 @@ type TReadWriteSelectorOptionsWithParams<T, P extends TSerializableParam> = TRea
   set: TSelectorStateSetterWithParams<T, P>;
 }
 
-type TReadOnlySelectorStateWithParams<T, P extends TSerializableParam> = (param: P) => (id: string) => IObservable<T>;
-type TReadWriteSelectorStateWithParams<T, P extends TSerializableParam> = (param: P) => (id: string) => IObservable<T>;
+
+type TReadOnlySelectorStateWithParams<T, P extends TSerializableParam> = (param: P) => IObservable<T>;
+type TReadWriteSelectorStateWithParams<T, P extends TSerializableParam> = (param: P) => IObservable<T>;
 
 
-export function selectorWithParams_UNSTABLE<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P>): TReadWriteSelectorStateWithParams<T, P>;
-export function selectorWithParams_UNSTABLE<T, P extends TSerializableParam>(options: TReadOnlySelectorOptionsWithParams<T, P>): TReadOnlySelectorStateWithParams<T, P>;
-export function selectorWithParams_UNSTABLE<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P> | TReadOnlySelectorOptionsWithParams<T, P>): TReadOnlySelectorStateWithParams<T, P> | TReadWriteSelectorStateWithParams<T, P> {
+export function advancedSelector<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P>): TReadWriteSelectorStateWithParams<T, P>;
+export function advancedSelector<T, P extends TSerializableParam>(options: TReadOnlySelectorOptionsWithParams<T, P>): TReadOnlySelectorStateWithParams<T, P>;
+export function advancedSelector<T, P extends TSerializableParam>(options: TReadWriteSelectorOptionsWithParams<T, P> | TReadOnlySelectorOptionsWithParams<T, P>): TReadOnlySelectorStateWithParams<T, P> | TReadWriteSelectorStateWithParams<T, P> {
   const getResolver: (param: P) => TSelectorStateGetter<T> = typeof options === 'object' ? options.get : options;
   const setResolver: ((param: P) => TSelectorStateSetter<T>) | undefined = typeof options === 'object' ? (options as any).set : undefined;
 
+  const selectorsCache: Map<string, IObservable<T>> = new Map();
 
-  const observableSelectors: { [key: string]: IObservable<any> } = {};
+  return (param: P) => {
+    const paramAsJson = JSON.stringify(param);
 
-  return (param: P) => (id: string) => {
-    if (observableSelectors[id]) return observableSelectors[id];
+    const recoveredSelectorData = selectorsCache.get(paramAsJson)
+    if (recoveredSelectorData) return recoveredSelectorData;
+
+    const destroy = () => selectorsCache.delete(paramAsJson);
 
     if (setResolver === undefined) {
-      observableSelectors[id] = selector({
+      const newSelector = selector({
         get: getResolver(param),
-      });
+      }, destroy);
+
+      selectorsCache.set(paramAsJson, newSelector);
+
+      return newSelector;
     } else {
-      observableSelectors[id] = selector({
+      const newSelector = selector({
         get: getResolver(param),
         set: setResolver(param),
-      });
-    }
+      }, destroy);
 
-    return observableSelectors[id];
+      selectorsCache.set(paramAsJson, newSelector);
+
+      return newSelector;
+    }
   };
 }

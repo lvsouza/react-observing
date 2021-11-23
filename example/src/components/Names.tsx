@@ -1,13 +1,11 @@
-import { IObservable, observe, selectorWithParams_UNSTABLE, transform, useObserver, useObserverValue } from 'react-observing'
+import { IObservable, set, observe, advancedSelector, transform, useObserver, useObserverValue } from 'react-observing'
 
 
-const namesStore = observe([
-  observe(''),
-]);
+const namesStore = observe([observe('')]);
 
 const namesLengthStore = transform(namesStore, names => names.length);
 
-const namesWordLengthStore = selectorWithParams_UNSTABLE<number, number>({
+const namesWordLengthAdvancedSelector = advancedSelector<number, number>({
   get: (multiplier = 1) => ({ get }) => {
     const items = get(namesStore);
 
@@ -25,8 +23,8 @@ const ItemsCount = () => {
 }
 
 const WordCount: React.FC<{ index?: number }> = ({ index }) => {
-  const namesWordLength = useObserverValue(namesWordLengthStore(index || 1)((index || 'trying').toString()));
-  return <p>(selector with params) Words count in all items: {namesWordLength}</p>
+  const namesWordLength = useObserverValue(namesWordLengthAdvancedSelector(index || 1));
+  return <p>(advanced selector) Words count in all items: {namesWordLength}</p>
 }
 
 const NameItem: React.FC<{ nameObservable: IObservable<string>, index: number }> = ({ nameObservable, index }) => {
@@ -35,6 +33,7 @@ const NameItem: React.FC<{ nameObservable: IObservable<string>, index: number }>
   return <li>
     <ItemsCount />
     <WordCount index={index} />
+    <button onClick={() => set(namesStore, old => [...old.filter((_, i) => i !== (index - 2))])}>Remove</button>
     <input value={name} onChange={e => setName(e.target.value)} />
   </li>
 }
