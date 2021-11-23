@@ -49,6 +49,10 @@
       link: '/examples/counter'
     - label: 'Word counter'
       link: '/examples/word-counter'
+    - label: 'To do'
+      link: '/examples/to-do'
+    - label: 'Advanced to do'
+      link: '/examples/advanced-to-do'
 
 - label: More
   items:

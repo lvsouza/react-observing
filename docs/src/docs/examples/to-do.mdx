@@ -1,0 +1,50 @@
+---
+title: To do
+description: How to create a to do with react observing.
+---
+
+Here is an example of how to use react observing to build a simple to do.
+
+```ts lineNumbers
+import { IObservable, observe, useObserver } from 'react-observing'
+
+
+const todosStore: IObservable<IObservable<string>[]> = observe([
+  observe(''),
+]);
+
+const Input: React.FC<{ todoObservable: IObservable<string> }> = ({ todoObservable }) => {
+  const [todo, setTodo] = useObserver(todoObservable);
+  return <input value={todo} onChange={e => setTodo(e.target.value)} />
+}
+
+const TodoItem: React.FC<{ todoObservable: IObservable<string>, onRemove: () => void }> = ({ todoObservable, onRemove }) => {
+  return <li>
+    <button onClick={onRemove}>Remove</button>
+    <Input todoObservable={todoObservable} />
+  </li>
+}
+
+
+export const TodoList = () => {
+  const [todos, setTodos] = useObserver(todosStore);
+
+  return (
+    <div>
+      <h1>Todo list</h1>
+
+      <button onClick={() => setTodos(old => [...old, observe('')])}>Add item</button>
+
+      <ul>
+        {todos.map((todo, index) => (
+          <TodoItem
+            key={todo.id}
+            todoObservable={todo}
+            onRemove={() => setTodos(old => [...old.filter((_, i) => i !== index)])}
+          />
+        ))}
+      </ul>
+    </div>
+  )
+}
+```

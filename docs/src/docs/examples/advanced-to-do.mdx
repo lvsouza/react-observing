@@ -1,0 +1,85 @@
+---
+title: Advanced to do
+description: How to create a advanced to do with react observing.
+---
+
+Here is an example of how to use react observing to build a advanced to do.
+
+```ts lineNumbers
+import { IObservable, observe, selector, transform, useObserver, useObserverValue } from 'react-observing'
+
+// To do store
+const todosStore: IObservable<IObservable<string>[]> = observe([
+  observe(''),
+]);
+
+// Store the length of to dos based on "todosStore"
+const todosLengthStore = transform(todosStore, todos => todos.length);
+
+// Store the count of the length of all to dos based on "todosStore" and each to do
+const todosWordLengthStore = selector({
+  get: ({ get }) => {
+    const items = get(todosStore);
+
+    const length = items.reduce((count, todo) => {
+      return count += get(todo).length;
+    }, 0);
+
+    return length;
+  }
+});
+
+
+// This component will re-render only if a new to do is added
+const ItemsCount = () => {
+  const todosLength = useObserverValue(todosLengthStore);
+  return <p>(transform) Items count: {todosLength}</p>
+}
+
+// This component will re-render if a new to do is added and if any to do text if changed
+const WordCount = () => {
+  const todosWordLength = useObserverValue(todosWordLengthStore);
+  return <p>(selector) Words count in all items: {todosWordLength}</p>
+}
+
+// This component will be repeated for each to do, and will re-render only if your to do is changed
+const Input: React.FC<{ todoObservable: IObservable<string> }> = ({ todoObservable }) => {
+  const [todo, setTodo] = useObserver(todoObservable);
+  return <input value={todo} onChange={e => setTodo(e.target.value)} />
+}
+
+const TodoItem: React.FC<{ todoObservable: IObservable<string>, onRemove: () => void }> = ({ todoObservable, onRemove }) => {
+  return <li>
+    <ItemsCount />
+    <WordCount />
+    <button onClick={onRemove}>Remove</button>
+    <Input todoObservable={todoObservable} />
+  </li>
+}
+
+
+export const TodoList = () => {
+  const [todos, setTodos] = useObserver(todosStore);
+
+  return (
+    <div>
+      <h1>Todo list</h1>
+
+      <ItemsCount />
+      <WordCount />
+
+      <button onClick={() => setTodos(old => [...old, observe('')])}>Add item</button>
+
+      <ul>
+        {todos.map((todo, index) => (
+          <TodoItem
+            key={todo.id}
+            todoObservable={todo}
+            onRemove={() => setTodos(old => [...old.filter((_, i) => i !== index)])}
+          />
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
