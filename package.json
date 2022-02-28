@@ -13,11 +13,11 @@
   },
   "scripts": {
     "test": "jest",
-    "docs": "cd docs & yarn start",
-    "example": "cd example & yarn start",
+    "docs": "cd docs && yarn start",
+    "example": "cd example/ && yarn start",
     "prebuild": "del-cli example/node_modules/react-observing/**/*",
     "build": "tsc",
-    "postbuild": "cpy **/* ../example/node_modules/react-observing/ --cwd=dist/ --parents"
+    "postbuild": "cpy '**/*' '../example/node_modules/react-observing/' --cwd=dist/ --parents"
   },
   "dependencies": {
     "uuid": "^8.3.2"
