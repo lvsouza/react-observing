@@ -1,7 +1,7 @@
 {
   "name": "react-observing",
   "version": "2.6.14",
-  "description": "Allow you observe objects and class in react js.",
+  "description": "Allow you observe any value in react js.",
   "license": "MIT",
   "author": "lvsouza",
   "main": "dist/index.js",
