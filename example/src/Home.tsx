@@ -1,5 +1,7 @@
 import { WordCounter } from './components/WordCounter';
-import { InputName } from './components/InputNome';
+import { UseTransformNumbersSum } from './components/use-transform/UseTransformNumbersSum';
+import { UseSelectorFullName } from './components/use-selector/UseSelectorFullName';
+import { TransformInputName } from './components/TransformInputNome';
 import { TodoList } from './components/TodoList';
 import { Counter } from './components/Counter';
 import { NameList } from './components/Names';
@@ -15,11 +17,15 @@ export const Home = () => {
       <hr />
       <Counter />
       <hr />
-      <InputName />
+      <TransformInputName />
       <hr />
       <NameList />
       <hr />
       <TodoList />
+      <hr />
+      <UseTransformNumbersSum />
+      <hr />
+      <UseSelectorFullName />
       <hr />
     </div>
   );

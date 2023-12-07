@@ -21,7 +21,7 @@ type TSelectorGetterSetterOptions = TSelectorGetterOptions & {
   set: TSetObservableValue;
 }
 
-type TSelectorStateGetter<T> = (options: TSelectorGetterOptions) => T;
+export type TSelectorStateGetter<T> = (options: TSelectorGetterOptions) => T;
 type TSelectorStateSetter<T> = (options: TSelectorGetterSetterOptions, newValue: T) => void;
 
 type TReadOnlySelectorOptions<T> = {

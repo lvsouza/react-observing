@@ -10,13 +10,13 @@ const nameTransformedStore = transform(
 )
 
 
-export const InputName = () => {
+export const TransformInputName = () => {
   const [transformedName, setTransformedName] = useObserver(nameTransformedStore);
   const [name, setName] = useObserver(nameStore);
 
   return (
     <div>
-      <h1>Input name</h1>
+      <h1>Transform - Input name</h1>
       <p>Original: {name}</p>
       <p>Transformed: {transformedName}</p>
       <input value={name} onChange={e => setName(e.target.value)} />

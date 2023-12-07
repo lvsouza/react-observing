@@ -2,6 +2,8 @@ export type { ITransformedObservable, ITransformedReadOnlyObservable } from './i
 export type { ISubscription } from './interfaces/ISubscription';
 export type { IObservable } from './interfaces/IObservable';
 export type { IListeners } from './interfaces/IListeners';
+export { useTransformValue } from './hooks/UseTransformValue';
+export { useSelectorValue } from './hooks/UseSelectorValue';
 export { useObserverValue } from './hooks/UseObserverValue';
 export { advancedSelector } from './core/AdvancedSelector';
 export { isObservableProp } from './core/IsObservableProp';
