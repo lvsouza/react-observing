@@ -1,6 +1,6 @@
 {
   "name": "react-observing",
-  "version": "2.6.15",
+  "version": "2.6.16",
   "description": "Allow you observe any value in react js.",
   "license": "MIT",
   "author": "lvsouza",
@@ -19,7 +19,9 @@
     "example": "cd example/ && yarn start",
     "example-install": "tsc && cd example/ && yarn"
   },
-  "dependencies": {},
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.3",

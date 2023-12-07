@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import { v4 as uuid } from 'uuid';
 
 import { ISubscription } from '../interfaces/ISubscription';
 import { IObservable } from '../interfaces/IObservable';
@@ -11,7 +11,7 @@ import { IListeners } from '../interfaces/IListeners';
  */
 export function observe<T>(initialValue: T): IObservable<T> {
   const storedListeners: IListeners<T>[] = [];
-  const observerId = crypto.randomUUID();
+  const observerId = uuid();
 
   const setCurrentValue = (newValue: T) => {
     initialValue = newValue;
@@ -26,7 +26,7 @@ export function observe<T>(initialValue: T): IObservable<T> {
    * @param fn Function performed when the value changes
    */
   const subscribe = (fn: (val: T) => void): ISubscription => {
-    const newListener = { id: crypto.randomUUID(), emit: fn };
+    const newListener = { id: uuid(), emit: fn };
     storedListeners.push(newListener);
 
     return {

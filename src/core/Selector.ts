@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import { v4 as uuid } from 'uuid';
 
 import { ISubscription } from '../interfaces/ISubscription';
 import { IObservable } from '../interfaces/IObservable';
@@ -69,7 +69,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
   const getResolver = typeof props === 'object' ? props.get : props;
 
   const storedListeners: IListeners<T>[] = [];
-  const selectorId = crypto.randomUUID();
+  const selectorId = uuid();
 
   /** Store subscriptions to unsubscribe */
   const observablesSubscribed: ISubscription[] = [];
@@ -118,7 +118,7 @@ export function selector<T>(props: TSelectorStateGetter<T> | TReadOnlySelectorOp
    * @param fn Function performed when the value changes
    */
   const subscribe = (fn: (val: T) => void): ISubscription => {
-    const newListener = { id: crypto.randomUUID(), emit: fn };
+    const newListener = { id: uuid(), emit: fn };
     storedListeners.push(newListener);
 
     if (observablesSubscribed.length === 0) {
