@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import crypto from 'crypto';
 
 import { ITransformedObservable, ITransformedReadOnlyObservable } from './../interfaces/ITransformedObservable';
 import { ISubscription } from './../interfaces/ISubscription';
@@ -22,7 +22,7 @@ export function transform<T, K>(observable: IObservable<T>, transformAndGetValue
  */
 export function transform<T, K>(observable: IObservable<T>, transformAndGetValue: (currValue: T) => K, transformAndSetValue: (currValue: K) => T): ITransformedObservable<K>;
 export function transform<T, K>(observable: IObservable<T>, transformAndGetValue: (currValue: T) => K, transformAndSetValue?: (currValue: K) => T): ITransformedObservable<K> {
-  const transformId = uuid();
+  const transformId = crypto.randomUUID();
 
   const setCurrentValue = (newValue: K) => {
     if (transformAndSetValue) {

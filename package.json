@@ -18,16 +18,12 @@
     "postinstall": "tsc && cd example/ && yarn",
     "build": "tsc"
   },
-  "dependencies": {
-    "uuid": "^9.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.3",
     "@types/react": "^18.2.42",
     "@types/uuid": "^9.0.7",
-    "cpy-cli": "^3.1.1",
-    "del-cli": "^4.0.1",
     "jest": "^29.7.0",
     "react": "^18.2.0",
     "ts-jest": "^29.1.1",
