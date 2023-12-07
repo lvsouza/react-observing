@@ -1,6 +1,6 @@
 {
   "name": "react-observing",
-  "version": "2.6.14",
+  "version": "2.6.15",
   "description": "Allow you observe any value in react js.",
   "license": "MIT",
   "author": "lvsouza",
@@ -13,10 +13,11 @@
   },
   "scripts": {
     "test": "jest",
+    "build": "tsc",
     "docs": "cd docs && yarn start",
+    "docs-install": "tsc && cd docs/ && yarn",
     "example": "cd example/ && yarn start",
-    "postinstall": "tsc && cd example/ && yarn",
-    "build": "tsc"
+    "example-install": "tsc && cd example/ && yarn"
   },
   "dependencies": {},
   "devDependencies": {
